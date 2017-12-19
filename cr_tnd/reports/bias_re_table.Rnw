@@ -1,0 +1,88 @@
+\documentclass{article}
+\usepackage[margin = 1in]{geometry}
+\usepackage{placeins}
+
+\title{Bias and Standard Error Estimation - Random Effects}
+\author{Suzanne Dufault}
+\date{\today}
+
+<<r global_options, include=FALSE>>=
+knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='Figs/',
+                       warning=FALSE, message=FALSE)
+@
+
+\begin{document}
+\maketitle
+
+<<echo = FALSE>>=
+library(xtable)
+@
+
+<<biasRE, echo = FALSE>>=
+## Ratio = 1
+
+# Bias
+oo1 <- (unlist(lapply(r.estNULL.1$OR_me, function(x) mean(x) - 1)))
+names(oo1) <- c(paste0(period1))
+oo2 <- (unlist(lapply(r.est6.1$OR_me, function(x) mean(x) - 0.6)))
+oo3 <- (unlist(lapply(r.est5.1$OR_me, function(x) mean(x) - 0.5)))
+oo4 <- (unlist(lapply(r.est4.1$OR_me, function(x) mean(x) - 0.4)))
+oo5 <- (unlist(lapply(r.est3.1$OR_me, function(x) mean(x) - 0.3)))
+bias <- rbind(oo1,oo2, oo3, oo4, oo5)
+biasRE <- rowMeans(bias)
+rownames(bias) <- c("1", "0.6", "0.5", "0.4", "0.3")
+bias <- cbind(bias, biasRE)
+colnames(bias)[10] <- "Bias" #Average (of Period Specific Means)
+
+# Standard Deviation
+pp1 <- (unlist(lapply(r.estNULL.1$sd_me_est, function(x) mean(x))))
+names(pp1) <- c(paste0(period1))
+pp2 <- (unlist(lapply(r.est6.1$sd_me_est, function(x) mean(x))))
+pp3 <- (unlist(lapply(r.est5.1$sd_me_est, function(x) mean(x))))
+pp4 <- (unlist(lapply(r.est4.1$sd_me_est, function(x) mean(x))))
+pp5 <- (unlist(lapply(r.est3.1$sd_me_est, function(x) mean(x))))
+sd <- rbind(pp1,pp2, pp3, pp4, pp5)
+rownames(sd) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
+sd <- cbind(sd, c(sd(log(unlist(r.estNULL.1$OR_me))), sd(log(unlist(r.est6.1$OR_me))), sd(log(unlist(r.est5.1$OR_me))), sd(log(unlist(r.est4.1$OR_me))), sd(log(unlist(r.est3.1$OR_stand)))))
+sd <- cbind(sd, c(mean(unlist(r.estNULL.1$sd_me_est)), mean(unlist(r.est6.1$sd_me_est)), mean(unlist(r.est5.1$sd_me_est)), mean(unlist(r.est4.1$sd_me_est)), mean(unlist(r.est3.1$sd_me_est))))
+colnames(sd)[10] <- "True"
+colnames(sd)[11] <- "Average"
+
+
+## Ratio = 4
+
+# Bias
+oo1 <- (unlist(lapply(r.estNULL.4$OR_me, function(x) mean(x) - 1)))
+names(oo1) <- c(paste0(period1))
+oo2 <- (unlist(lapply(r.est6.4$OR_me, function(x) mean(x) - 0.6)))
+oo3 <- (unlist(lapply(r.est5.4$OR_me, function(x) mean(x) - 0.5)))
+oo4 <- (unlist(lapply(r.est4.4$OR_me, function(x) mean(x) - 0.4)))
+oo5 <- (unlist(lapply(r.est3.4$OR_me, function(x) mean(x) - 0.3)))
+bias <- rbind(oo1,oo2, oo3, oo4, oo5)
+biasRE4 <- rowMeans(bias)
+rownames(bias) <- c("1", "0.6", "0.5", "0.4", "0.3")
+bias <- cbind(bias, biasRE4)
+colnames(bias)[10] <- "Bias" #Average (of Period Specific Means)
+
+# Standard Deviation
+pp1 <- (unlist(lapply(r.estNULL.4$sd_me_est, function(x) mean(x))))
+names(pp1) <- c(paste0(period1))
+pp2 <- (unlist(lapply(r.est6.4$sd_me_est, function(x) mean(x))))
+pp3 <- (unlist(lapply(r.est5.4$sd_me_est, function(x) mean(x))))
+pp4 <- (unlist(lapply(r.est4.4$sd_me_est, function(x) mean(x))))
+pp5 <- (unlist(lapply(r.est3.1$sd_me_est, function(x) mean(x))))
+sd2 <- rbind(pp1,pp2, pp3, pp4, pp5)
+rownames(sd2) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
+sd2 <- cbind(sd2, c(sd(log(unlist(r.estNULL.4$OR_me))), sd(log(unlist(r.est6.4$OR_me))), sd(log(unlist(r.est5.4$OR_me))), sd(log(unlist(r.est4.4$OR_me))), sd(log(unlist(r.est3.1$OR_me)))))
+sd2 <- cbind(sd2, c(mean(unlist(r.estNULL.4$sd_me_est)), mean(unlist(r.est6.4$sd_me_est)), mean(unlist(r.est5.4$sd_me_est)), mean(unlist(r.est4.4$sd_me_est)), mean(unlist(r.est3.4$sd_me_est))))
+colnames(sd2)[10] <- "True"
+colnames(sd2)[11] <- "Average"
+@
+
+<<biasREtab, echo = FALSE, results = 'asis'>>=
+tbl <- data.frame(Bias.1 = biasRE, Est.SD.1 = sd[11], TRUE.SD.1 = sd[10], Bias.4 = biasRE4, Est.SD.4 = sd2[11], True.SD.4 = sd2[10], row.names = c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3"))
+xtable(tbl, align = c("cc|ccc|ccc"), caption = "The bias and standard deviation for the random effects Odds Ratio estimates of the relative risk from 10,000 unconstrained allocations.")
+@
+
+
+\end{document}

@@ -1,0 +1,86 @@
+\documentclass{article}
+\usepackage[margin = 0.2in]{geometry}
+\usepackage{placeins}
+
+\title{Bias and Standard Error Estimation - Test Positive Fraction (Pooled SDs)}
+\author{Suzanne Dufault}
+\date{\today}
+
+<<r global_options, include=FALSE>>=
+knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='Figs/',
+                       warning=FALSE, message=FALSE)
+@
+
+\begin{document}
+\maketitle
+
+<<echo = FALSE>>=
+library(xtable)
+@
+
+<<echo = FALSE>>=
+## Ratio = 1
+
+# Bias
+pp1 <- (unlist(lapply(tNULLr.2.1$lambdas, function(x) mean(x) - 1)))
+names(pp1) <- c(paste0(period1)) 
+pp2 <- (unlist(lapply(t60r.2.1$lambdas, function(x) mean(x) - 0.6)))
+pp3 <- (unlist(lapply(t50r.2.1$lambdas, function(x) mean(x) - 0.5)))
+pp4 <- (unlist(lapply(t40r.2.1$lambdas, function(x) mean(x) - 0.4)))
+pp5 <- (unlist(lapply(t30r.2.1$lambdas, function(x) mean(x) - 0.3)))
+bias <- rbind(pp1,pp2, pp3, pp4, pp5)
+rownames(bias) <- c("1", "0.6", "0.5", "0.4", "0.3")
+bias1 <- rowMeans(bias)
+bias <- cbind(bias, bias1)
+colnames(bias)[10] <- "Bias" #Average (of Period Specific Means)
+
+# Standard Deviation
+pp1 <- (unlist(lapply(tNULLr.2.1$sds, function(x) sqrt(mean(2*x^2/12)))))
+names(pp1) <- c(paste0(period1)) 
+pp2 <- (unlist(lapply(t60r.2.1$sds, function(x) sqrt(mean(2*x^2/12)))))
+pp3 <- (unlist(lapply(t50r.2.1$sds, function(x) sqrt(mean(2*x^2/12)))))
+pp4 <- (unlist(lapply(t40r.2.1$sds, function(x) sqrt(mean(2*x^2/12)))))
+pp5 <- (unlist(lapply(t30r.2.1$sds, function(x) sqrt(mean(2*x^2/12)))))
+sd <- rbind(pp1,pp2, pp3, pp4, pp5)
+rownames(sd) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
+sd <- cbind(sd, c(sd(unlist(tNULLr.2.1$tVals)), sd(unlist(t60r.2.1$tVals)), sd(unlist(t50r.2.1$tVals)), sd(unlist(t40r.2.1$tVals)), sd(unlist(t30r.2.1$tVals))))
+sd <- cbind(sd, c(mean(sqrt(2*unlist(tNULLr.2.1$sds)^2/12)), mean(sqrt(2*unlist(t60r.2.1$sds)^2/12)), mean(sqrt(2*unlist(t50r.2.1$sds)^2/12)), mean(sqrt(2*unlist(t40r.2.1$sds)^2/12)), mean(sqrt(2*unlist(t30r.2.1$sds)^2/12))))
+colnames(sd)[10] <- "True"
+colnames(sd)[11] <- "Average"
+
+
+## Ratio = 4
+pp1 <- (unlist(lapply(tNULLr.2$lambdas, function(x) mean(x) - 1)))
+names(pp1) <- c(paste0(period1)) 
+pp2 <- (unlist(lapply(t60r.2$lambdas, function(x) mean(x) - 0.6)))
+pp3 <- (unlist(lapply(t50r.2$lambdas, function(x) mean(x) - 0.5)))
+pp4 <- (unlist(lapply(t40r.2$lambdas, function(x) mean(x) - 0.4)))
+pp5 <- (unlist(lapply(t30r.2$lambdas, function(x) mean(x) - 0.3)))
+bias <- rbind(pp1,pp2, pp3, pp4, pp5)
+bias4 <- rowMeans(bias)
+rownames(bias) <- c("1", "0.6", "0.5", "0.4", "0.3")
+bias <- cbind(bias, bias4)
+colnames(bias)[10] <- "Bias" #Average (of Period Specific Means)
+
+# Standard Deviation
+pp1 <- (unlist(lapply(tNULLr.2$sds, function(x) sqrt(mean(2*x^2/12)))))
+names(pp1) <- c(paste0(period1)) 
+pp2 <- (unlist(lapply(t60r.2$sds, function(x) sqrt(mean(2*x^2/12)))))
+pp3 <- (unlist(lapply(t50r.2$sds, function(x) sqrt(mean(2*x^2/12)))))
+pp4 <- (unlist(lapply(t40r.2$sds, function(x) sqrt(mean(2*x^2/12)))))
+pp5 <- (unlist(lapply(t30r.2$sds, function(x) sqrt(mean(2*x^2/12)))))
+sd2 <- rbind(pp1,pp2, pp3, pp4, pp5)
+rownames(sd2) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
+sd2 <- cbind(sd2, c(sd(unlist(tNULLr.2$tVals)), sd(unlist(t60r.2$tVals)), sd(unlist(t50r.2$tVals)), sd(unlist(t40r.2$tVals)), sd(unlist(t30r.2$tVals))))
+sd2 <- cbind(sd, c(mean(sqrt(2*unlist(tNULLr.2$sds)^2/12)), mean(sqrt(2*unlist(t60r.2$sds)^2/12)), mean(sqrt(2*unlist(t50r.2$sds)^2/12)), mean(sqrt(2*unlist(t40r.2$sds)^2/12)), mean(sqrt(2*unlist(t30r.2$sds)^2/12))))
+colnames(sd2)[10] <- "True"
+colnames(sd2)[11] <- "Average"
+@
+
+<<tpfTable, echo = FALSE, results = 'asis'>>=
+tbl <- data.frame(Bias.1 = bias1, Est.SD.1 = sd[11], True.SD.1 = sd[10], Bias.4 = bias4, Est.SD.4 = sd2[11], True.SD.4 = sd[10], row.names = c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3"))
+xtable(tbl, align = c("cc|ccc|ccc"), caption = "The bias for the test-positive fraction quadratic estimates of the Relative Risk and the standard deviation of the difference in arm-specific averages (T) from 10,000 unconstrained intervention allocations.")
+@
+
+
+\end{document}

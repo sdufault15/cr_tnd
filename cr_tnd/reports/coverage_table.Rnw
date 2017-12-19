@@ -1,0 +1,76 @@
+\documentclass{article}
+\usepackage[margin = 1in]{geometry}
+\usepackage{placeins}
+
+\title{Coverage}
+\author{Suzanne Dufault}
+\date{\today}
+
+<<r global_options, include=FALSE>>=
+knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='Figs/',
+                       warning=FALSE, message=FALSE)
+@
+
+\begin{document}
+\maketitle
+
+<<echo = FALSE>>=
+library(xtable)
+@
+
+<<echo = FALSE>>=
+
+# TPM (ratio = 1 and 4)
+covP <- cbind(c(mean(unlist(tNULLr.2.1$coverage)), mean(unlist(t60r.2.1$coverage)), mean(unlist(t50r.2.1$coverage)), mean(unlist(t40r.2.1$coverage)), mean(unlist(t30r.2.1$coverage))) ,c(mean(unlist(tNULLr.2$coverage)), mean(unlist(t60r.2$coverage)), mean(unlist(t50r.2$coverage)), mean(unlist(t40r.2$coverage)), mean(unlist(t30r.2$coverage))))
+colnames(covP) <- c("Ratio = 1", "Ratio = 4")
+rownames(covP) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
+
+## Ratio = 1
+# Direct
+aa <- mean(log(1) <= log(unlist(biasOR.paper.NULL.1$OR_est)) + zstar*unlist(biasOR.paper.NULL.1$sd_est) & log(1) >= log(unlist(biasOR.paper.NULL.1$OR_est)) - zstar*unlist(biasOR.paper.NULL.1$sd_est)) # across all periods
+bb <- mean(log(0.6) <= log(unlist(biasOR.paper.6.1$OR_est)) + zstar*unlist(biasOR.paper.6.1$sd_est) & log(1) >= log(unlist(biasOR.paper.6.1$OR_est)) - zstar*unlist(biasOR.paper.6.1$sd_est)) # across all periods
+cc <- mean(log(0.5) <= log(unlist(biasOR.paper.5.1$OR_est)) + zstar*unlist(biasOR.paper.5.1$sd_est) & log(1) >= log(unlist(biasOR.paper.5.1$OR_est)) - zstar*unlist(biasOR.paper.5.1$sd_est)) # across all periods
+dd <- mean(log(0.4) <= log(unlist(biasOR.paper.4.1$OR_est)) + zstar*unlist(biasOR.paper.4.1$sd_est) & log(1) >= log(unlist(biasOR.paper.4.1$OR_est)) - zstar*unlist(biasOR.paper.4.1$sd_est)) # across all periods
+ee <- mean(log(0.3) <= log(unlist(biasOR.paper.3.1$OR_est)) + zstar*unlist(biasOR.paper.3.1$sd_est) & log(1) >= log(unlist(biasOR.paper.3.1$OR_est)) - zstar*unlist(biasOR.paper.3.1$sd_est)) # across all periods
+
+r1 <- c(aa,bb,cc,dd,ee)
+
+# Random Effects Method
+aa <- mean(log(1) <= log(unlist(r.estNULL.1$OR_me)) + zstar*unlist(r.estNULL.1$sd_me_est) & log(1) >= log(unlist(r.estNULL.1$OR_me)) - zstar*unlist(r.estNULL.1$sd_me_est)) # across all periods
+bb <- mean(log(0.6) <= log(unlist(r.est6.1$OR_me)) + zstar*unlist(r.est6.1$sd_me_est) & log(1) >= log(unlist(r.est6.1$OR_me)) - zstar*unlist(r.est6.1$sd_me_est)) # across all periods
+cc <- mean(log(0.5) <= log(unlist(r.est5.1$OR_me)) + zstar*unlist(r.est5.1$sd_me_est) & log(1) >= log(unlist(r.est5.1$OR_me)) - zstar*unlist(r.est5.1$sd_me_est)) # across all periods
+dd <- mean(log(0.4) <= log(unlist(r.est4.1$OR_me)) + zstar*unlist(r.est4.1$sd_me_est) & log(1) >= log(unlist(r.est4.1$OR_me)) - zstar*unlist(r.est4.1$sd_me_est)) # across all periods
+ee <- mean(log(0.3) <= log(unlist(r.est3.1$OR_me)) + zstar*unlist(r.est3.1$sd_me_est) & log(1) >= log(unlist(r.est3.1$OR_me)) - zstar*unlist(r.est3.1$sd_me_est)) # across all periods
+
+r1re <- c(aa,bb,cc,dd,ee)
+
+
+
+# Ratio = 4
+aa <- mean(log(1) <= log(unlist(biasOR.paper.NULL.4$OR_est)) + zstar*unlist(biasOR.paper.NULL.4$sd_est) & log(1) >= log(unlist(biasOR.paper.NULL.4$OR_est)) - zstar*unlist(biasOR.paper.NULL.4$sd_est)) # across all periods
+bb <- mean(log(0.6) <= log(unlist(biasOR.paper.6$OR_est)) + zstar*unlist(biasOR.paper.6$sd_est) & log(1) >= log(unlist(biasOR.paper.6$OR_est)) - zstar*unlist(biasOR.paper.6$sd_est)) # across all periods
+cc <- mean(log(0.5) <= log(unlist(biasOR.paper.5$OR_est)) + zstar*unlist(biasOR.paper.5$sd_est) & log(1) >= log(unlist(biasOR.paper.5$OR_est)) - zstar*unlist(biasOR.paper.5$sd_est)) # across all periods
+dd <- mean(log(0.4) <= log(unlist(biasOR.paper.4$OR_est)) + zstar*unlist(biasOR.paper.4$sd_est) & log(1) >= log(unlist(biasOR.paper.4$OR_est)) - zstar*unlist(biasOR.paper.4$sd_est)) # across all periods
+ee <- mean(log(0.3) <= log(unlist(biasOR.paper.3$OR_est)) + zstar*unlist(biasOR.paper.3$sd_est) & log(1) >= log(unlist(biasOR.paper.3$OR_est)) - zstar*unlist(biasOR.paper.3$sd_est)) # across all periods
+
+r2 <- cbind(r1, c(aa,bb,cc,dd,ee)) # OF COURSE THEY ARE THE SAME...
+
+# Random Effects
+aa <- mean(log(1) <= log(unlist(r.estNULL.4$OR_me)) + zstar*unlist(r.estNULL.4$sd_me_est) & log(1) >= log(unlist(r.estNULL.4$OR_me)) - zstar*unlist(r.estNULL.4$sd_me_est)) # across all periods
+bb <- mean(log(0.6) <= log(unlist(r.est6.4$OR_me)) + zstar*unlist(r.est6.4$sd_me_est) & log(1) >= log(unlist(r.est6.4$OR_me)) - zstar*unlist(r.est6.4$sd_me_est)) # across all periods
+cc <- mean(log(0.5) <= log(unlist(r.est5.4$OR_me)) + zstar*unlist(r.est5.4$sd_me_est) & log(1) >= log(unlist(r.est5.4$OR_me)) - zstar*unlist(r.est5.4$sd_me_est)) # across all periods
+dd <- mean(log(0.4) <= log(unlist(r.est4.4$OR_me)) + zstar*unlist(r.est4.4$sd_me_est) & log(1) >= log(unlist(r.est4.4$OR_me)) - zstar*unlist(r.est4.4$sd_me_est)) # across all periods
+ee <- mean(log(0.3) <= log(unlist(r.est3.4$OR_me)) + zstar*unlist(r.est3.4$sd_me_est) & log(1) >= log(unlist(r.est3.4$OR_me)) - zstar*unlist(r.est3.4$sd_me_est)) # across all periods
+
+r2re <- cbind(r1, c(aa,bb,cc,dd,ee)) 
+@
+
+<<coverageTab, echo = FALSE, results = 'asis'>>=
+tbl <- data.frame(DirectOR = r1, RE.1 = re1re, TPM.1 = covP[1], RE.4 = re2re, TPM.4 = covP[2], row.names = c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3"), align = c("c|cc|cc"), caption = "The coverage averaged across the 10,000 intervention allocations and 9 time periods for th eproposed Odds Ratio method, the random effects Odds Ratio estimates, and the test-positive method using pooled variance estimation. The proposed Odds Ratio Method is invariant to r.")
+@
+
+
+
+
+
+\end{document}
