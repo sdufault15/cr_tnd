@@ -1,7 +1,6 @@
-tTestFunction <- function(dta, rrIN, period, ncases = 1000, ratio = 4, both = TRUE){
+tTestFunction <- function(dta, rrIN, period, ncases = 1000, ratio = 4){
   # This function uses the quadratic equation formulated in the paper to estimate lambda
-  # for the t-tests. Last modified on 8/14/2017 to include coverage and the output of T
-  # values (i.e. the difference in arm-specific means)
+  # for the t-tests. Last modified on 12/19/2017 to only assign treatment to 1 arm
   
   set.seed(1234234) # Reproducibility
   
@@ -49,39 +48,17 @@ tTestFunction <- function(dta, rrIN, period, ncases = 1000, ratio = 4, both = TR
       # To get the estimated variances, take the average of the variance of the logged proportions in each arm
       sd.hat <- sqrt(mean(c(var(prop[tx.temp == 1]), var(prop[tx.temp == 0]))))
       
-      if (both == TRUE){
-        # Switch Treatment to Alternate Treatment Allocation
-        tx.temp <- txDta[[i]]
-        nStarProp <- propCases # Recode the proportion of dengue per cluster
-        for (b in 1:length(tx.temp)){
-          if (tx.temp[b] == 1){tx.temp[b] <- 0}
-          else {tx.temp[b] <- 1}
-        }
-        
-        nStarProp[tx.temp == 1] <- nStarProp[tx.temp == 1]*rr
-        nStarProp <- nStarProp/sum(nStarProp)
-        nCases <- nStarProp*n1
-        prop <- nCases/(nCases + nControls)
-        test2 <- t.test(prop ~ as.factor(tx.temp), var.equal = TRUE)
-        ET2 <- diff(test2$estimate)
-        cov2 <- rrIN < quad(-test2$conf.int[1], ratio)[which(quad(-test2$conf.int[1]) > 0, ratio)] & rrIN > quad(-test2$conf.int[2], ratio)[which(quad(-test2$conf.int[2], ratio) > 0)]
-        
-        lambda.hat.2 <- quad(ET2, ratio)[which(quad(ET2, ratio) > 0)]
-        sd.hat.2 <- sqrt(mean(c(var(prop[tx.temp == 1]), var(prop[tx.temp == 0]))))
-        
-      }
+        out1 <- rbind(out, test$statistic)
+        out2 <- rbind(out2, test$p.val)
+        out3 <- rbind(out3, lambda.hat)
+        out4 <- rbind(out4, sd.hat)
+        out5 <- rbind(out5, cov)
+        out6 <- rbind(out6, ET)
       
-      if (both == TRUE) {
-        out <- rbind(out, c(test$statistic, test2$statistic))
-        out2 <- rbind(out2, c(test$p.val, test2$p.val))
-        out3 <- rbind(out3, c(lambda.hat, lambda.hat.2))
-        out4 <- rbind(out4, c(sd.hat, sd.hat.2))
-        out5 <- rbind(out5, c(cov,cov2))
-        out6 <- rbind(out6, c(ET, ET2))
-      }
       
     }
-    TOTtStats[[iter1]] <- out
+    
+    TOTtStats[[iter1]] <- out1
     TOTpvals[[iter1]] <- out2
     lambdas[[iter1]] <- out3
     sds[[iter1]] <- out4

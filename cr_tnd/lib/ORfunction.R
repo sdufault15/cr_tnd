@@ -1,9 +1,7 @@
-# TO DO:
-# - Currently only works if both == TRUE
+# Modified so that this only evaluates treatment in 1 arm
+# LAST EDIT: 12/19/17
 
-# LAST EDIT: 10/29/17
-
-ORTestFunction <- function(dF, rrIN, period, n1 = 1000, ratio = 4, both = TRUE){
+ORTestFunction <- function(dF, rrIN, period, n1 = 1000, ratio = 4){
   # 'dta' is a matrix/dataframe containing cluster, case and control data, corresponding time periods and treatment allocations
   # 'rr' is a vector of relative risks to be tested
   # 'period' is a vector of corresponding time periods for the case and control data
@@ -51,7 +49,7 @@ ORTestFunction <- function(dF, rrIN, period, n1 = 1000, ratio = 4, both = TRUE){
       # NEED TO RESHAPE THE DATA
       freq.1 <- nCases
       freq.0 <- nControls
-      tempWide <- data.frame(dta$Cluster, txDta, freq.1, freq.0)
+      tempWide <- data.frame(dta$clust, txDta, freq.1, freq.0)
       tempWide <- reshape(data = tempWide, direction = "long", varying = 3:4, sep = "." )
       #print(tempWide)
       #v <- ceiling(as.matrix(tempWide$freq))
@@ -61,43 +59,12 @@ ORTestFunction <- function(dF, rrIN, period, n1 = 1000, ratio = 4, both = TRUE){
       g1 <- geeglm(time ~ tempWide[[2]], data = tempWide, family = binomial, weights = v, id = tempWide[[1]], corstr = "exchangeable", scale.fix = TRUE)
       me1 <- glmer(time ~ tempWide[[2]] + (1 | id ), family = binomial, data = tempWide, weights = v) 
         
-      if (both == TRUE){
-        #tStat <- NULL
-        # Switch Treatment to Alternate Treatment Allocation
-        tx.temp <- txDtaF[,i]
-          
-          nStarProp <- propCases # Recode the proportion of dengue per cluster
-          for (b in 1:length(tx.temp)){
-            if (tx.temp[b] == 1){tx.temp[b] <- 0}
-            else {tx.temp[b] <- 1}
-          }
-          
-          nStarProp[tx.temp == 1] <- nStarProp[tx.temp == 1]*rrIN
-          nStarProp <- nStarProp/sum(nStarProp)
-          nCases <- nStarProp*n1
-          prop <- nCases/(nCases + nControls)
-          
-          # NEED TO RESHAPE THE DATA
-          freq.1 <- nCases
-          freq.0 <- nControls
-          tempWide <- data.frame(dta$Cluster, tx.temp, freq.1, freq.0)
-          tempWide <- reshape(data = tempWide, direction = "long", varying = 3:4, sep = "." )
-          #print(tempWide)
-          v <- ceiling(as.matrix(tempWide$freq))
-          mod2 <- glm(time ~ tempWide[[2]] , family = "binomial", data = tempWide, weights = v) 
-          #test2 <- summary(mod, robust = TRUE) # getting robust standard errors 
-          g2 <- geeglm(time ~ tempWide[[2]], data = tempWide, family = binomial, weights =v, id = tempWide[[1]], corstr = "exchangeable", scale.fix = TRUE)
-          #print(summary(g2)$coefficients)
-          me2 <- glmer(time ~ tempWide[[2]] + (1 | id ), family = binomial, data = tempWide, weights = v) 
-          #print(me2)
-          }
-        #OR_est <- rbind(OR_est, c(OR_est1, OR_est2))
-      ORgee <- rbind(ORgee, c(exp(summary(g1)$coefficients[2,1]), exp(summary(g2)$coefficients[2,1]))) # Unlogged ORs
-      ORme <- rbind(ORme, c(exp(summary(me1)$coefficients[2]), exp(summary(me2)$coefficients[2])))
-      ORstand <- rbind(ORstand, c(exp(summary(mod1)$coefficients[2]), exp(summary(mod2)$coefficients[2])))
-      sdGEE <- rbind(sdGEE, c(summary(g1)$coefficients[2,2], summary(g2)$coefficients[2,2])) # Logged SDs
-      sdME <- rbind(sdME, c(summary(me1)$coefficients[4], summary(me2)$coefficients[4]))
-      sdStand <- rbind(sdStand, c(summary(mod1)$coefficients[4], summary(mod2)$coefficients[4]))
+      ORgee <- rbind(ORgee, exp(summary(g1)$coefficients[2,1])) # Unlogged ORs
+      ORme <- rbind(ORme, exp(summary(me1)$coefficients[2]))
+      ORstand <- rbind(ORstand, exp(summary(mod1)$coefficients[2]))
+      sdGEE <- rbind(sdGEE, summary(g1)$coefficients[2,2]) # Logged SDs
+      sdME <- rbind(sdME, summary(me1)$coefficients[4])
+      sdStand <- rbind(sdStand, summary(mod1)$coefficients[4])
     }
     geeORMatrix[[iter1]] <- ORgee
     meORMatrix[[iter1]] <- ORme
