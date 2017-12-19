@@ -1,0 +1,86 @@
+\documentclass{article}
+\usepackage{placeins}
+\usepackage{float}
+\usepackage[margin = 1in]{geometry}
+
+
+<<r global_options, include=FALSE>>=
+knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='Figs/',
+                       warning=FALSE, message=FALSE)
+@
+
+\title{Tables for CR-TND Paper}
+\date{\today}
+\author{Suzanne Dufault}
+
+\begin{document}
+
+\maketitle
+\abstract{This document contains all of the TeX output for the tables provided in the paper ``Analysis of Cluster Randomized Test-Negative Designs: Cluster-Level Methods''}
+
+<<echo = FALSE>>=
+library(xtable)
+@
+
+<<power, echo = FALSE>>=
+# Test Positive
+o1 <- (unlist(lapply(nullRAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
+names(o1) <- c(paste0(period1)) 
+o2 <- (unlist(lapply(t6RAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
+o3 <- (unlist(lapply(t5RAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
+o4 <- (unlist(lapply(t4RAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
+o5 <- (unlist(lapply(t3RAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
+o <- rbind(o1,o2, o3, o4, o5)
+avgTPF <- rowMeans(o)
+rownames(o) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
+o <- cbind(o, avgTPF)
+colnames(o)[10] <- "Average"
+
+# OR
+o1 <- (unlist(lapply(nullRAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
+names(o1) <- c(paste0(period1)) 
+o2 <- (unlist(lapply(t6RAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
+o3 <- (unlist(lapply(t5RAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
+o4 <- (unlist(lapply(t4RAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
+o5 <- (unlist(lapply(t3RAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
+o <- rbind(o1,o2, o3, o4, o5)
+avgOR <- rowMeans(o)
+rownames(o) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
+o <- cbind(o, avgOR)
+colnames(o)[10] <- "Average"
+
+# GEE
+pp1 <- (unlist(lapply(rand1$pval_GEE, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
+names(pp1) <- c(paste0(period1)) 
+pp2 <- (unlist(lapply(rand6$pval_GEE, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
+pp3 <- (unlist(lapply(rand5$pval_GEE, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
+pp4 <- (unlist(lapply(rand4$pval_GEE, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
+pp5 <- (unlist(lapply(rand3$pval_GEE, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
+pp <- rbind(pp1,pp2, pp3, pp4, pp5)
+avgGEE <- rowMeans(pp)
+rownames(pp) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
+pp <- cbind(pp, avgGEE)
+colnames(pp)[10] <- "Average"
+
+# ME
+pp1me <- (unlist(lapply(rand1$pval_ME, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
+names(pp1me) <- c(paste0(period1)) 
+pp2me <- (unlist(lapply(rand6$pval_ME, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
+pp3me <- (unlist(lapply(rand5$pval_ME, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
+pp4me <- (unlist(lapply(rand4$pval_ME, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
+pp5me <- (unlist(lapply(rand3$pval_ME, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
+ppme <- rbind(pp1me,pp2me, pp3me, pp4me, pp5me)
+avgME <- rowMeans(ppme)
+rownames(ppme) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
+ppme <- cbind(ppme, avgME)
+colnames(ppme)[10] <- "Average"  
+@
+
+<<powerTab, echo = FALSE, results = 'asis'>>=
+tbl <- data.frame(RR = c(1,0.6,0.5,0.4,0.3),TestPositiveFraction = avgTPF, OR=avgOR, GEE = avgGEE, RandomEffects=avgME)
+xtable(tbl, caption = "The proportion of simulations that returned significant results for each intervention effect of interest (lambda). The GEE assumed an exchangeable correlation matrix. Each approach was applied to the results of the 10,000 random intervention allocations with 1,000 cases and 4,000 controls (r = 4).")
+@
+
+
+
+\end{document}
