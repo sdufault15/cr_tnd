@@ -41,10 +41,10 @@ tTestFunction <- function(dta, rrIN, period, ncases = 1000, ratio = 4, both = TR
       prop <- nCases/(nCases + nControls) # a_j  
       test <- t.test(prop ~ as.factor(tx.temp), var.equal = TRUE) # Pooled variance
       ET <- diff(test$estimate)
-      lambda.hat <- quad(ET)[which(quad(ET) > 0)]
+      lambda.hat <- quad(ET, ratio)[which(quad(ET, ratio) > 0)]
       
       # To get coverage
-      cov <- rrIN < quad(-test$conf.int[1])[which(quad(-test$conf.int[1]) > 0)] & rrIN > quad(-test$conf.int[2])[which(quad(-test$conf.int[2]) > 0)]
+      cov <- rr < quad(-test$conf.int[1], ratio)[which(quad(-test$conf.int[1], ratio) > 0)] & rr > quad(-test$conf.int[2], ratio)[which(quad(-test$conf.int[2], ratio) > 0)]
       
       # To get the estimated variances, take the average of the variance of the logged proportions in each arm
       sd.hat <- sqrt(mean(c(var(prop[tx.temp == 1]), var(prop[tx.temp == 0]))))
@@ -64,9 +64,9 @@ tTestFunction <- function(dta, rrIN, period, ncases = 1000, ratio = 4, both = TR
         prop <- nCases/(nCases + nControls)
         test2 <- t.test(prop ~ as.factor(tx.temp), var.equal = TRUE)
         ET2 <- diff(test2$estimate)
-        cov2 <- rrIN < quad(-test2$conf.int[1])[which(quad(-test2$conf.int[1]) > 0)] & rrIN > quad(-test2$conf.int[2])[which(quad(-test2$conf.int[2]) > 0)]
+        cov2 <- rrIN < quad(-test2$conf.int[1], ratio)[which(quad(-test2$conf.int[1]) > 0, ratio)] & rrIN > quad(-test2$conf.int[2], ratio)[which(quad(-test2$conf.int[2], ratio) > 0)]
         
-        lambda.hat.2 <- quad(ET2)[which(quad(ET2) > 0)]
+        lambda.hat.2 <- quad(ET2, ratio)[which(quad(ET2, ratio) > 0)]
         sd.hat.2 <- sqrt(mean(c(var(prop[tx.temp == 1]), var(prop[tx.temp == 0]))))
         
       }
