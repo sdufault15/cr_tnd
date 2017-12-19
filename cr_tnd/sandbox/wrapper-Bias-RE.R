@@ -6,7 +6,7 @@ zstar <- qnorm(0.975)
 library(geepack)
 library(lme4)
 
-source("~/cr_tnd/paperFunction2.R")
+source("~/cr_tnd/ORfunction.R")
 source("~/cr_tnd/quadraticFunction.R")
 source("~/cr_tnd/txtSetFunction.R")
 load("~/cr_tnd/Random10000Allocations.RData")

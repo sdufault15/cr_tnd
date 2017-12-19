@@ -16,6 +16,42 @@ knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='Figs/',
 
 <<echo = FALSE>>=
 library(xtable)
+
+# Using data from bias-test-positive-fraction.R
+load("../../dec17/randomNULLtTest1_12192017.Rdata")
+load("../../dec17/randomNULLtTest4_12192017.Rdata")
+load("../../dec17/random6tTest1_12192017.Rdata")
+load("../../dec17/random6tTest4_12192017.Rdata")
+load("../../dec17/random5tTest1_12192017.Rdata")
+load('../../dec17/random5tTest4_12192017.Rdata')
+load("../../dec17/random4tTest1_12192017.Rdata")
+load("../../dec17/random4tTest4_12192017.Rdata")
+load("../../dec17/random3tTest1_12192017.Rdata")
+load("../../dec17/random3tTest4_12192017.Rdata")
+
+# Using data from bias-random-effects.R - These are the RANDOM EFFECTS RESULTS
+load("../../dec17/r_estNULL_12192017.Rdta")
+load("../../dec17/r_estNULL_4_12192017.Rdta")
+load("../../dec17/r_est6_12192017.Rdta")
+load("../../dec17/r_est6_4_12192017.Rdta")
+load("../../dec17/r_est5_12192017.Rdta")
+load("../../dec17/r_est5_4_12192017.Rdta")
+load("../../dec17/r_est4_12192017.Rdta")
+load("../../dec17/r_est4_4_12192017.Rdta")
+load("../../dec17/r_est3_12192017.Rdta")
+load("../../dec17/r_est3_4_12192017.Rdta")
+
+# Using data from coverage.R - These are the DIRECT ODDS RATIO METHOD RESULTS
+load("../dec17/biasOR_paper_NULL_1_12192017.Rdta")
+load("../dec17/biasOR_paper_NULL_12192017.Rdta")
+load("../dec17/biasOR_paper_6_1_12192017.Rdta")
+load("../dec17/biasOR_paper_6_12192017.Rdta")
+load("../dec17/biasOR_paper_5_1_12192017.Rdta")
+load("../dec17/biasOR_paper_5_12192017.Rdta")
+load("../dec17/biasOR_paper_4_1_12192017.Rdta")
+load("../dec17/biasOR_paper_4_12192017.Rdta")
+load("../dec17/biasOR_paper_3_1_12192017.Rdta")
+load("../dec17/biasOR_paper_3_12192017.Rdta")
 @
 
 <<echo = FALSE>>=

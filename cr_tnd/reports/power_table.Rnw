@@ -20,6 +20,25 @@ knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='Figs/',
 
 <<echo = FALSE>>=
 library(xtable)
+
+# Using data from proportion-significant.R
+load("../dec17/tNULLr_12192017.RData")
+load("../dec17/t60r_12192017.RData")
+load("../dec17/t50r_12192017.RData")
+load("../dec17/t40r_12192017.RData")
+load("../dec17/t30r_12192017.RData")
+
+load("../dec17/orNULLr_12192017.RData")
+load("../dec17/or6r_12192017.RData")
+load("../dec17/or5r_12192017.RData")
+load("../dec17/or4r_12192017.RData")
+load("../dec17/or3r_12192017.RData")
+
+load("../dec17/rand1_12192017.RData")
+load("../dec17/rand6_12192017.RData")
+load("../dec17/rand5_12192017.RData")
+load("../dec17/rand4_12192017.RData")
+load("../dec17/rand3_12192017.RData")
 @
 
 <<power, echo = FALSE>>=
