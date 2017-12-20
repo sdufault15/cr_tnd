@@ -9,6 +9,15 @@ The .Rnw files are compiled with `knitr` and make use of `pdflatex` to compile.
 ## Project Layout
 This repository adopted the formatting used by the `ProjectTemplate` package.
 
+To load the project change `setwd()` to the location 
+where this README file is located. Then run the following two
+lines of R code:
+
+	library('ProjectTemplate')
+	load.project()
+
+
+
 Overview of the contents of this repository:
 * **data** contains both the historical data and 3 different generated random allocation sets (5,000 allocations, 10,000 allocations, and 50,000 allocations). We used the 10,000 random treatment allocations for the sake of computation. 
 * **munge** contains the global edits to the data that are implemented prior to any analysis.  
