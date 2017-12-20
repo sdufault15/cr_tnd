@@ -1,1 +1,1 @@
-Here you'll store your raw data files. If they are encoded in a supported file format, they'll automatically be loaded when you call `load.project()`.
+This folder holds the data used for the paper. To automatically load the project use the command: `load.project()` after setting your working directory to `cr_tnd`.
