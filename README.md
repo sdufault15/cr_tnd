@@ -16,7 +16,7 @@ lines of R code:
 	library('ProjectTemplate')
 	load.project()
 
-
+For more details about ProjectTemplate, see http://projecttemplate.net
 
 Overview of the contents of this repository:
 * **data** contains both the historical data and 3 different generated random allocation sets (5,000 allocations, 10,000 allocations, and 50,000 allocations). We used the 10,000 random treatment allocations for the sake of computation. 
