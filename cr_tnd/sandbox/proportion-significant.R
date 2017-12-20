@@ -27,13 +27,13 @@ t3RAND <- paperFunction2(dataRAND, rr = 0.3, period = period1, ratio = 4, ncases
 save(t3RAND, file = "or3r_12192017.RData")
 
 # GEE & Random Effects
-rand1 <- ORTestFunction(dataRAND, 1, period1, n1 = 1000, ratio = 4)
+rand1 <- ORTestFunction(dataRAND, rrIN = 1, period1, n1 = 1000, ratio = 4)
 save(rand1, file = "rand1_12192017.RData")
-rand6 <- ORTestFunction(dataRAND, .6, period1, n1 = 1000, ratio = 4)
+rand6 <- ORTestFunction(dataRAND, rrIN = .6, period1, n1 = 1000, ratio = 4)
 save(rand6, file = "rand6_12192017.RData")
-rand5 <- ORTestFunction(dataRAND, .5, period1, n1 = 1000, ratio = 4)
+rand5 <- ORTestFunction(dataRAND, rrIN = .5, period1, n1 = 1000, ratio = 4)
 save(rand5, file = "rand5_12192017.RData")
-rand4 <- ORTestFunction(dataRAND, .4, period1, n1 = 1000, ratio = 4)
+rand4 <- ORTestFunction(dataRAND, rrIN = .4, period1, n1 = 1000, ratio = 4)
 save(rand4, file = "rand4_12192017.RData")
-rand3 <- ORTestFunction(dataRAND, .3, period1, n1 = 1000, ratio = 4)
+rand3 <- ORTestFunction(dataRAND, rrIN = .3, period1, n1 = 1000, ratio = 4)
 save(rand3, file = "rand3_12192017.RData")
