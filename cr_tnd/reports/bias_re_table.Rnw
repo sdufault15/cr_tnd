@@ -16,6 +16,17 @@ knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='Figs/',
 
 <<echo = FALSE>>=
 library(xtable)
+# Using data from bias-random-effects.R
+load("../../dec17/biasOR_paper_NULL_1_12192017.RData")
+load("../../dec17/biasOR_paper_NULL_12192017.RData")
+load("../../dec17/biasOR_paper_6_1_12192017.RData")
+load("../../dec17/biasOR_paper_6_12192017.RData")
+load("../../dec17/biasOR_paper_5_1_12192017.RData")
+load("../../dec17/biasOR_paper_5_12192017.RData")
+load("../../dec17/biasOR_paper_4_1_12192017.RData")
+load("../../dec17/biasOR_paper_4_12192017.RData")
+load("../../dec17/biasOR_paper_3_1_12192017.RData")
+load("../../dec17/biasOR_paper_3_12192017.RData")
 @
 
 <<biasRE, echo = FALSE>>=
