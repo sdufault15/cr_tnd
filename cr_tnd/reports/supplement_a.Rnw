@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage[margin = 1in]{geometry}
+\usepackage{placeins}
+
+\title{Supplement A}
+\author{Suzanne Dufault}
+\date{\today}
+
+<<r global_options, include=FALSE>>=
+knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='../graphs/',
+                       warning=FALSE, message=FALSE)
+@
+
+\begin{document}
+\maketitle
+
+<<echo = FALSE>>=
+library(xtable)
+library(dplyr)
+library(tidyr)
+@
+
+<<echo = FALSE>>=
+load("../cache/Random10000Allocations.RData")
+dataRAND <- Random10000Allocations
+period1 <- c("03_05", "05_06", "06_07", "07_08", "08_10", "10_11", "11_12", "12_13", "13_14")
+@
+
+<<echo = FALSE, results = 'asis'>>=
+# To match those in the paper (which were generated before I set the seed.)
+clust <- seq(1:10)
+Cases <- c(52, 74, 54, 72, 46, 42, 70, 50, 73, 69)
+OFI <- c(138, 212, 125, 145, 165, 194, 250, 131, 229, 156)
+df <- data.frame(ClusterID = clust, Cases, OFI) 
+df <- bind_rows(df, c(colSums(df[,2:3])))
+xtable(df, caption = "Hypothetical dengue and OFI distribution for an example of 10 clusters used for permutation distribution estimates", digits = 0)
+@
+
+<<echo = FALSE, results = 'asis'>>=
+# Dengue Counts
+dataRAND %>% select(Cluster = clust, Period, Cases) %>% arrange(Period) %>% spread(Period, Cases) %>% xtable(align = c("lc|ccccccccc"), caption = "Historical Dengue counts in each of the 24 clusters over the observed 2 year periods.")
+@
+
+<<echo = FALSE, results = 'asis'>>=
+dataRAND %>% filter(Period == "03_05") %>% select(Cluster = clust, OFI) %>% xtable(align = c("lc|c"), caption = "Historical OFI counts in the only two year period that was observed.")
+@
+
+
+\end{document}

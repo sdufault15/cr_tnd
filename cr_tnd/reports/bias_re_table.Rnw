@@ -16,6 +16,7 @@ knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='Figs/',
 
 <<echo = FALSE>>=
 library(xtable)
+# Using data from bias-random-effects.R
 @
 
 <<biasRE, echo = FALSE>>=

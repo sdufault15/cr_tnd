@@ -7,7 +7,7 @@
 \date{\today}
 
 <<r global_options, include=FALSE>>=
-knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='Figs/',
+knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='../graphs/',
                        warning=FALSE, message=FALSE)
 @
 
@@ -16,42 +16,47 @@ knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='Figs/',
 
 <<echo = FALSE>>=
 library(xtable)
+setwd("../../dec17/")
+getwd()
+zstar <- qnorm(0.975)
+period1 <- c("03_05", "05_06", "06_07", "07_08", "08_10", "10_11", "11_12", "12_13", "13_14")
 
 # Using data from bias-test-positive-fraction.R
-load("../../dec17/randomNULLtTest1_12192017.Rdata")
-load("../../dec17/randomNULLtTest4_12192017.Rdata")
-load("../../dec17/random6tTest1_12192017.Rdata")
-load("../../dec17/random6tTest4_12192017.Rdata")
-load("../../dec17/random5tTest1_12192017.Rdata")
-load('../../dec17/random5tTest4_12192017.Rdata')
-load("../../dec17/random4tTest1_12192017.Rdata")
-load("../../dec17/random4tTest4_12192017.Rdata")
-load("../../dec17/random3tTest1_12192017.Rdata")
-load("../../dec17/random3tTest4_12192017.Rdata")
+load("randomNULLtTest1_12192017.Rdata")
+load("randomNULLtTest4_12192017.Rdata")
+load("random6tTest1_12192017.Rdata")
+load("random6tTest4_12192017.Rdata")
+load("random5tTest1_12192017.Rdata")
+load('random5tTest4_12192017.Rdata')
+load("random4tTest1_12192017.Rdata")
+load("random4tTest4_12192017.Rdata")
+load("random3tTest1_12192017.Rdata")
+load("random3tTest4_12192017.Rdata")
 
 # Using data from bias-random-effects.R - These are the RANDOM EFFECTS RESULTS
-load("../../dec17/r_estNULL_12192017.Rdta")
-load("../../dec17/r_estNULL_4_12192017.Rdta")
-load("../../dec17/r_est6_12192017.Rdta")
-load("../../dec17/r_est6_4_12192017.Rdta")
-load("../../dec17/r_est5_12192017.Rdta")
-load("../../dec17/r_est5_4_12192017.Rdta")
-load("../../dec17/r_est4_12192017.Rdta")
-load("../../dec17/r_est4_4_12192017.Rdta")
-load("../../dec17/r_est3_12192017.Rdta")
-load("../../dec17/r_est3_4_12192017.Rdta")
+load("r_estNULL_12192017.RData")
+#load("r_estNULL_4_12192017.RData")
+load("r_est6_12192017.RData")
+#load("r_est6_4_12192017.RData")
+load("r_est5_12192017.RData")
+#load("r_est5_4_12192017.RData")
+#load("r_est4_12192017.RData")
+#load("r_est4_4_12192017.RData")
+#load("r_est3_12192017.RData")
+#load("r_est3_4_12192017.RData")
+
 
 # Using data from coverage.R - These are the DIRECT ODDS RATIO METHOD RESULTS
-load("../dec17/biasOR_paper_NULL_1_12192017.Rdta")
-load("../dec17/biasOR_paper_NULL_12192017.Rdta")
-load("../dec17/biasOR_paper_6_1_12192017.Rdta")
-load("../dec17/biasOR_paper_6_12192017.Rdta")
-load("../dec17/biasOR_paper_5_1_12192017.Rdta")
-load("../dec17/biasOR_paper_5_12192017.Rdta")
-load("../dec17/biasOR_paper_4_1_12192017.Rdta")
-load("../dec17/biasOR_paper_4_12192017.Rdta")
-load("../dec17/biasOR_paper_3_1_12192017.Rdta")
-load("../dec17/biasOR_paper_3_12192017.Rdta")
+load("biasOR_paper_NULL_1_12192017.RData")
+load("biasOR_paper_NULL_12192017.RData")
+load("biasOR_paper_6_1_12192017.RData")
+load("biasOR_paper_6_12192017.RData")
+load("biasOR_paper_5_1_12192017.RData")
+load("biasOR_paper_5_12192017.RData")
+load("biasOR_paper_4_1_12192017.RData")
+load("biasOR_paper_4_12192017.RData")
+load("biasOR_paper_3_1_12192017.RData")
+load("biasOR_paper_3_12192017.RData")
 @
 
 <<echo = FALSE>>=
@@ -75,15 +80,15 @@ r1 <- c(aa,bb,cc,dd,ee)
 aa <- mean(log(1) <= log(unlist(r.estNULL.1$OR_me)) + zstar*unlist(r.estNULL.1$sd_me_est) & log(1) >= log(unlist(r.estNULL.1$OR_me)) - zstar*unlist(r.estNULL.1$sd_me_est)) # across all periods
 bb <- mean(log(0.6) <= log(unlist(r.est6.1$OR_me)) + zstar*unlist(r.est6.1$sd_me_est) & log(1) >= log(unlist(r.est6.1$OR_me)) - zstar*unlist(r.est6.1$sd_me_est)) # across all periods
 cc <- mean(log(0.5) <= log(unlist(r.est5.1$OR_me)) + zstar*unlist(r.est5.1$sd_me_est) & log(1) >= log(unlist(r.est5.1$OR_me)) - zstar*unlist(r.est5.1$sd_me_est)) # across all periods
-dd <- mean(log(0.4) <= log(unlist(r.est4.1$OR_me)) + zstar*unlist(r.est4.1$sd_me_est) & log(1) >= log(unlist(r.est4.1$OR_me)) - zstar*unlist(r.est4.1$sd_me_est)) # across all periods
-ee <- mean(log(0.3) <= log(unlist(r.est3.1$OR_me)) + zstar*unlist(r.est3.1$sd_me_est) & log(1) >= log(unlist(r.est3.1$OR_me)) - zstar*unlist(r.est3.1$sd_me_est)) # across all periods
+#dd <- mean(log(0.4) <= log(unlist(r.est4.1$OR_me)) + zstar*unlist(r.est4.1$sd_me_est) & log(1) >= log(unlist(r.est4.1$OR_me)) - zstar*unlist(r.est4.1$sd_me_est)) # across all periods
+#ee <- mean(log(0.3) <= log(unlist(r.est3.1$OR_me)) + zstar*unlist(r.est3.1$sd_me_est) & log(1) >= log(unlist(r.est3.1$OR_me)) - zstar*unlist(r.est3.1$sd_me_est)) # across all periods
 
-r1re <- c(aa,bb,cc,dd,ee)
+r1re <- c(aa,bb,cc,"","")#,dd,ee)
 
 
 
 # Ratio = 4
-aa <- mean(log(1) <= log(unlist(biasOR.paper.NULL.4$OR_est)) + zstar*unlist(biasOR.paper.NULL.4$sd_est) & log(1) >= log(unlist(biasOR.paper.NULL.4$OR_est)) - zstar*unlist(biasOR.paper.NULL.4$sd_est)) # across all periods
+aa <- mean(log(1) <= log(unlist(biasOR.paper.NULL$OR_est)) + zstar*unlist(biasOR.paper.NULL$sd_est) & log(1) >= log(unlist(biasOR.paper.NULL$OR_est)) - zstar*unlist(biasOR.paper.NULL$sd_est)) # across all periods
 bb <- mean(log(0.6) <= log(unlist(biasOR.paper.6$OR_est)) + zstar*unlist(biasOR.paper.6$sd_est) & log(1) >= log(unlist(biasOR.paper.6$OR_est)) - zstar*unlist(biasOR.paper.6$sd_est)) # across all periods
 cc <- mean(log(0.5) <= log(unlist(biasOR.paper.5$OR_est)) + zstar*unlist(biasOR.paper.5$sd_est) & log(1) >= log(unlist(biasOR.paper.5$OR_est)) - zstar*unlist(biasOR.paper.5$sd_est)) # across all periods
 dd <- mean(log(0.4) <= log(unlist(biasOR.paper.4$OR_est)) + zstar*unlist(biasOR.paper.4$sd_est) & log(1) >= log(unlist(biasOR.paper.4$OR_est)) - zstar*unlist(biasOR.paper.4$sd_est)) # across all periods
@@ -91,18 +96,24 @@ ee <- mean(log(0.3) <= log(unlist(biasOR.paper.3$OR_est)) + zstar*unlist(biasOR.
 
 r2 <- cbind(r1, c(aa,bb,cc,dd,ee)) # OF COURSE THEY ARE THE SAME...
 
-# Random Effects
-aa <- mean(log(1) <= log(unlist(r.estNULL.4$OR_me)) + zstar*unlist(r.estNULL.4$sd_me_est) & log(1) >= log(unlist(r.estNULL.4$OR_me)) - zstar*unlist(r.estNULL.4$sd_me_est)) # across all periods
-bb <- mean(log(0.6) <= log(unlist(r.est6.4$OR_me)) + zstar*unlist(r.est6.4$sd_me_est) & log(1) >= log(unlist(r.est6.4$OR_me)) - zstar*unlist(r.est6.4$sd_me_est)) # across all periods
-cc <- mean(log(0.5) <= log(unlist(r.est5.4$OR_me)) + zstar*unlist(r.est5.4$sd_me_est) & log(1) >= log(unlist(r.est5.4$OR_me)) - zstar*unlist(r.est5.4$sd_me_est)) # across all periods
-dd <- mean(log(0.4) <= log(unlist(r.est4.4$OR_me)) + zstar*unlist(r.est4.4$sd_me_est) & log(1) >= log(unlist(r.est4.4$OR_me)) - zstar*unlist(r.est4.4$sd_me_est)) # across all periods
-ee <- mean(log(0.3) <= log(unlist(r.est3.4$OR_me)) + zstar*unlist(r.est3.4$sd_me_est) & log(1) >= log(unlist(r.est3.4$OR_me)) - zstar*unlist(r.est3.4$sd_me_est)) # across all periods
+## Random Effects
+#aa <- mean(log(1) <= log(unlist(r.estNULL.4$OR_me)) + zstar*unlist(r.estNULL.4$sd_me_est) & log(1) >= log(unlist(r.estNULL.4$OR_me)) - zstar*unlist(r.estNULL.4$sd_me_est)) # across all periods
+#bb <- mean(log(0.6) <= log(unlist(r.est6.4$OR_me)) + zstar*unlist(r.est6.4$sd_me_est) & log(1) >= log(unlist(r.est6.4$OR_me)) - zstar*unlist(r.est6.4$sd_me_est)) # across all periods
+#cc <- mean(log(0.5) <= log(unlist(r.est5.4$OR_me)) + zstar*unlist(r.est5.4$sd_me_est) & log(1) >= log(unlist(r.est5.4$OR_me)) - zstar*unlist(r.est5.4$sd_me_est)) # across all periods
+#dd <- mean(log(0.4) <= log(unlist(r.est4.4$OR_me)) + zstar*unlist(r.est4.4$sd_me_est) & log(1) >= log(unlist(r.est4.4$OR_me)) - zstar*unlist(r.est4.4$sd_me_est)) # across all periods
+#ee <- mean(log(0.3) <= log(unlist(r.est3.4$OR_me)) + zstar*unlist(r.est3.4$sd_me_est) & log(1) >= log(unlist(r.est3.4$OR_me)) - zstar*unlist(r.est3.4$sd_me_est)) # across all periods
 
-r2re <- cbind(r1, c(aa,bb,cc,dd,ee)) 
+#r2re <- cbind(r1, c(aa,bb,cc,dd,ee)) 
 @
 
 <<coverageTab, echo = FALSE, results = 'asis'>>=
-tbl <- data.frame(DirectOR = r1, RE.1 = re1re, TPM.1 = covP[1], RE.4 = re2re, TPM.4 = covP[2], row.names = c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3"), align = c("c|cc|cc"), caption = "The coverage averaged across the 10,000 intervention allocations and 9 time periods for th eproposed Odds Ratio method, the random effects Odds Ratio estimates, and the test-positive method using pooled variance estimation. The proposed Odds Ratio Method is invariant to r.")
+tbl <- data.frame(DirectOR = r1, RE.1 = r1re, TPM.1 = covP[1], RE.4 = r2re, TPM.4 = covP[2], row.names = c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3"))
+xtable(tbl, align = c("cc|cc|cc"), caption = "The coverage averaged across the 10,000 intervention allocations and 9 time periods for th eproposed Odds Ratio method, the random effects Odds Ratio estimates, and the test-positive method using pooled variance estimation. The proposed Odds Ratio Method is invariant to r.", digits = 4)
+@
+
+<<coverageTabINTER, echo = FALSE, results = 'asis'>>=
+tbl <- data.frame(DirectOR = r1, TPM.1 = covP[,1], RE.1 = r1re,  TPM.4 = covP[,2], row.names = c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3"))
+xtable(tbl, align = c("cc|cc|c"), caption = "The coverage averaged across the 10,000 intervention allocations and 9 time periods for th eproposed Odds Ratio method, the random effects Odds Ratio estimates, and the test-positive method using pooled variance estimation. The proposed Odds Ratio Method is invariant to r.", digits = 8)
 @
 
 
