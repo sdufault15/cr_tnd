@@ -16,29 +16,32 @@ knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='Figs/',
 \begin{document}
 
 \maketitle
-\abstract{This document contains all of the TeX output for the tables provided in the paper ``Analysis of Cluster Randomized Test-Negative Designs: Cluster-Level Methods''}
+
 
 <<echo = FALSE>>=
 library(xtable)
-
+setwd("../../dec17/")
 # Using data from proportion-significant.R
-load("../dec17/tNULLr_12192017.RData")
-load("../dec17/t60r_12192017.RData")
-load("../dec17/t50r_12192017.RData")
-load("../dec17/t40r_12192017.RData")
-load("../dec17/t30r_12192017.RData")
+load("tNULLr_12192017.RData")
+load("t60r_12192017.RData")
+load("t50r_12192017.RData")
+load("t40r_12192017.RData")
+load("t30r_12192017.RData")
 
-load("../dec17/orNULLr_12192017.RData")
-load("../dec17/or6r_12192017.RData")
-load("../dec17/or5r_12192017.RData")
-load("../dec17/or4r_12192017.RData")
-load("../dec17/or3r_12192017.RData")
+load("orNULLr_12192017.RData")
+load("or6r_12192017.RData")
+load("or5r_12192017.RData")
+load("or4r_12192017.RData")
+load("or3r_12192017.RData")
 
-load("../dec17/rand1_12192017.RData")
-load("../dec17/rand6_12192017.RData")
-load("../dec17/rand5_12192017.RData")
-load("../dec17/rand4_12192017.RData")
-load("../dec17/rand3_12192017.RData")
+load("rand1_12192017.RData")
+load("rand6_12192017.RData")
+load("rand5_12192017.RData")
+load("rand4_12192017.RData")
+load("rand3_12192017.RData")
+
+zstar <- qnorm(0.975)
+period1 <- c("03_05", "05_06", "06_07", "07_08", "08_10", "10_11", "11_12", "12_13", "13_14")
 @
 
 <<power, echo = FALSE>>=
@@ -56,48 +59,35 @@ o <- cbind(o, avgTPF)
 colnames(o)[10] <- "Average"
 
 # OR
-o1 <- (unlist(lapply(nullRAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
-names(o1) <- c(paste0(period1)) 
-o2 <- (unlist(lapply(t6RAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
-o3 <- (unlist(lapply(t5RAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
-o4 <- (unlist(lapply(t4RAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
-o5 <- (unlist(lapply(t3RAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
-o <- rbind(o1,o2, o3, o4, o5)
-avgOR <- rowMeans(o)
-rownames(o) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
-o <- cbind(o, avgOR)
-colnames(o)[10] <- "Average"
+pp1 <- unlist(lapply(list(rand1$OR_stand, rand1$sd_stand), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
+pp2 <- unlist(lapply(list(rand6$OR_stand, rand6$sd_stand), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
+pp3 <- unlist(lapply(list(rand5$OR_stand, rand5$sd_stand), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
+pp4 <- unlist(lapply(list(rand4$OR_stand, rand4$sd_stand), function(x) as.numeric( 0 > log(unlist(x[[1]]) ) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
+pp5 <- unlist(lapply(list(rand3$OR_stand, rand3$sd_stand), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
+avgOR <- c(1 - mean(pp1), 1 - mean(pp2), 1 - mean(pp3), 1 - mean(pp4), 1 - mean(pp5))
+
 
 # GEE
-pp1 <- (unlist(lapply(rand1$pval_GEE, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
-names(pp1) <- c(paste0(period1)) 
-pp2 <- (unlist(lapply(rand6$pval_GEE, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
-pp3 <- (unlist(lapply(rand5$pval_GEE, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
-pp4 <- (unlist(lapply(rand4$pval_GEE, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
-pp5 <- (unlist(lapply(rand3$pval_GEE, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
-pp <- rbind(pp1,pp2, pp3, pp4, pp5)
-avgGEE <- rowMeans(pp)
-rownames(pp) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
-pp <- cbind(pp, avgGEE)
-colnames(pp)[10] <- "Average"
+pp1 <- unlist(lapply(list(rand1$OR_gee, rand1$sd_gee_est), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
+pp2 <- unlist(lapply(list(rand6$OR_gee, rand6$sd_gee_est), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
+pp3 <- unlist(lapply(list(rand5$OR_gee, rand5$sd_gee_est), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
+pp4 <- unlist(lapply(list(rand4$OR_gee, rand4$sd_gee_est), function(x) as.numeric( 0 > log(unlist(x[[1]]) ) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
+pp5 <- unlist(lapply(list(rand3$OR_gee, rand3$sd_gee_est), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
+avgGEE <- c(1 - mean(pp1), 1 - mean(pp2), 1 - mean(pp3), 1 - mean(pp4), 1 - mean(pp5))
+
 
 # ME
-pp1me <- (unlist(lapply(rand1$pval_ME, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
-names(pp1me) <- c(paste0(period1)) 
-pp2me <- (unlist(lapply(rand6$pval_ME, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
-pp3me <- (unlist(lapply(rand5$pval_ME, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
-pp4me <- (unlist(lapply(rand4$pval_ME, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
-pp5me <- (unlist(lapply(rand3$pval_ME, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
-ppme <- rbind(pp1me,pp2me, pp3me, pp4me, pp5me)
-avgME <- rowMeans(ppme)
-rownames(ppme) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
-ppme <- cbind(ppme, avgME)
-colnames(ppme)[10] <- "Average"  
+pp1me <- unlist(lapply(list(rand1$OR_me, rand1$sd_me_est), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
+pp2me <- unlist(lapply(list(rand6$OR_me, rand6$sd_me_est), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
+pp3me <- unlist(lapply(list(rand5$OR_me, rand5$sd_me_est), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
+pp4me <- unlist(lapply(list(rand4$OR_me, rand4$sd_me_est), function(x) as.numeric( 0 > log(unlist(x[[1]] )) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
+pp5me <- unlist(lapply(list(rand3$OR_me, rand3$sd_me_est), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
+avgME <- c(1 - mean(pp1me), 1 - mean(pp2me), 1 - mean(pp3me), 1 - mean(pp4me), 1 - mean(pp5me))  
 @
 
 <<powerTab, echo = FALSE, results = 'asis'>>=
 tbl <- data.frame(TestPositiveFraction = avgTPF, OR=avgOR, GEE = avgGEE, RandomEffects=avgME, row.names = c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3"))
-xtable(tbl, caption = "The proportion of simulations that returned significant results for each intervention effect of interest (lambda). The GEE assumed an exchangeable correlation matrix. Each approach was applied to the results of the 10,000 random intervention allocations with 1,000 cases and 4,000 controls (r = 4).")
+xtable(tbl, align = c("l|cccc"), caption = "The proportion of simulations that returned significant results for each intervention effect of interest (lambda). The GEE assumed an exchangeable correlation matrix. Each approach was applied to the results of the 10,000 random intervention allocations with 1,000 cases and 4,000 controls (r = 4).", digits = 4)
 @
 
 

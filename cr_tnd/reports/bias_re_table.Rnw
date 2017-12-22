@@ -16,7 +16,21 @@ knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='Figs/',
 
 <<echo = FALSE>>=
 library(xtable)
+setwd("../../dec17/")
 # Using data from bias-random-effects.R
+load("r_estNULL_12192017.RData")
+load("r_est6_12192017.RData")
+load("r_est5_12192017.RData")
+load("r_est4_12192017.RData")
+load("r_est3_12192017.RData")
+
+load("r_estNULL_4_12192017.RData")
+load("r_est6_4_12192017.RData")
+load("r_est5_4_12192017.RData")
+load("r_est4_4_12192017.RData")
+load("r_est3_4_12192017.RData")
+zstar <- qnorm(0.975)
+period1 <- c("03_05", "05_06", "06_07", "07_08", "08_10", "10_11", "11_12", "12_13", "13_14")
 @
 
 <<biasRE, echo = FALSE>>=
@@ -81,8 +95,8 @@ colnames(sd2)[11] <- "Average"
 @
 
 <<biasREtab, echo = FALSE, results = 'asis'>>=
-tbl <- data.frame(Bias.1 = biasRE, Est.SD.1 = sd[11], TRUE.SD.1 = sd[10], Bias.4 = biasRE4, Est.SD.4 = sd2[11], True.SD.4 = sd2[10], row.names = c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3"))
-xtable(tbl, align = c("cc|ccc|ccc"), caption = "The bias and standard deviation for the random effects Odds Ratio estimates of the relative risk from 10,000 unconstrained allocations.")
+tbl <- data.frame(Bias.1 = biasRE, Est.SD.1 = sd[,11], TRUE.SD.1 = sd[,10], Bias.4 = biasRE4, Est.SD.4 = sd2[,11], True.SD.4 = sd2[,10], row.names = c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3"))
+xtable(tbl, align = c("c|ccc|ccc"), caption = "The bias and standard deviation for the random effects Odds Ratio estimates of the relative risk from 10,000 unconstrained allocations.", digits = 4)
 @
 
 
