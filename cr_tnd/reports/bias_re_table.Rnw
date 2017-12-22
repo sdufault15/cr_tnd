@@ -16,6 +16,7 @@ knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='Figs/',
 
 <<echo = FALSE>>=
 library(xtable)
+<<<<<<< HEAD
 setwd("../../dec17/")
 # Using data from bias-random-effects.R
 load("r_estNULL_12192017.RData")
@@ -31,6 +32,19 @@ load("r_est4_4_12192017.RData")
 load("r_est3_4_12192017.RData")
 zstar <- qnorm(0.975)
 period1 <- c("03_05", "05_06", "06_07", "07_08", "08_10", "10_11", "11_12", "12_13", "13_14")
+=======
+# Using data from bias-random-effects.R
+load("../../dec17/biasOR_paper_NULL_1_12192017.RData")
+load("../../dec17/biasOR_paper_NULL_12192017.RData")
+load("../../dec17/biasOR_paper_6_1_12192017.RData")
+load("../../dec17/biasOR_paper_6_12192017.RData")
+load("../../dec17/biasOR_paper_5_1_12192017.RData")
+load("../../dec17/biasOR_paper_5_12192017.RData")
+load("../../dec17/biasOR_paper_4_1_12192017.RData")
+load("../../dec17/biasOR_paper_4_12192017.RData")
+load("../../dec17/biasOR_paper_3_1_12192017.RData")
+load("../../dec17/biasOR_paper_3_12192017.RData")
+>>>>>>> d2e2ff52f96e5a8d0f9c36957ab355dbdadf9076
 @
 
 <<biasRE, echo = FALSE>>=
