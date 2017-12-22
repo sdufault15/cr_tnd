@@ -1,5 +1,6 @@
 # Modified so that this only evaluates treatment in 1 arm
-# LAST EDIT: 12/19/17
+# Modified to return p-values
+# LAST EDIT: 12/22/17
 
 ORTestFunction <- function(dF, rrIN, period, n1 = 1000, ratio = 4){
   # 'dta' is a matrix/dataframe containing cluster, case and control data, corresponding time periods and treatment allocations
@@ -21,6 +22,9 @@ ORTestFunction <- function(dF, rrIN, period, n1 = 1000, ratio = 4){
   standORMatrix <- vector('list', length = length(period))
   sdGEEMatrix <- vector('list', length = length(period))
   sdMEMatrix <- vector('list', length = length(period))
+  pvalmeORMatrix <- vector('list', length = length(period))
+  pvalstandORMatrix <- vector('list', length = length(period))
+  pvalgeeORMatrix <- vector('list', length = length(period))
   zstar <- qnorm(0.975)
   iter1 <- 1
   
@@ -29,6 +33,9 @@ ORTestFunction <- function(dF, rrIN, period, n1 = 1000, ratio = 4){
     sdME <- NULL
     sdGEE <- NULL
     sdStand <- NULL
+    pvalME <- NULL
+    pvalGEE <- NULL
+    pvalStand <- NULL
     ORme <- NULL
     ORgee <- NULL
     ORstand <- NULL
@@ -65,6 +72,9 @@ ORTestFunction <- function(dF, rrIN, period, n1 = 1000, ratio = 4){
       sdGEE <- rbind(sdGEE, summary(g1)$coefficients[2,2]) # Logged SDs
       sdME <- rbind(sdME, summary(me1)$coefficients[4])
       sdStand <- rbind(sdStand, summary(mod1)$coefficients[4])
+      pvalGEE <- rbind(pvalGEE, summary(g1)$coefficients[2,4])
+      pvalME <- rbind(pvalME, summary(me1)$coefficients[2,4])
+      pvalStand <- rbind(pvalStand, summary(mod1)$coefficients[2,4])
     }
     geeORMatrix[[iter1]] <- ORgee
     meORMatrix[[iter1]] <- ORme
@@ -72,9 +82,13 @@ ORTestFunction <- function(dF, rrIN, period, n1 = 1000, ratio = 4){
     sdGEEMatrix[[iter1]] <- sdGEE
     sdMEMatrix[[iter1]] <- sdME
     sdStandMatrix[[iter1]] <- sdStand
+    pvalgeeORMatrix[[iter1]] <- pvalGEE
+    pvalmeORMatrix[[iter1]] <- pvalME
+    pvalstandORMatrix[[iter1]] <- pvalStand
     
     iter1 <- iter1 + 1
   }
   output <- list(OR_stand = standORMatrix, sd_stand = sdStandMatrix, OR_gee = geeORMatrix,
-                 sd_gee_est = sdGEEMatrix, OR_me = meORMatrix, sd_me_est = sdMEMatrix)
+                 sd_gee_est = sdGEEMatrix, OR_me = meORMatrix, sd_me_est = sdMEMatrix,
+                 pval_gee = pvalgeeORMatrix, pval_me = pvalmeORMatrix, pval_stand = pvalstandORMatrix)
 }
