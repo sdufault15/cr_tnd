@@ -34,11 +34,11 @@ load("or5r_12192017.RData")
 load("or4r_12192017.RData")
 load("or3r_12192017.RData")
 
-load("rand1_12192017.RData")
-load("rand6_12192017.RData")
-load("rand5_12192017.RData")
-load("rand4_12192017.RData")
-load("rand3_12192017.RData")
+load("r_estNULL_4_12222017.RData")
+load("r_est6_4_12222017.RData")
+load("r_est5_4_12222017.RData")
+load("r_est4_4_12222017.RData")
+load("r_est3_4_12222017.RData")
 
 zstar <- qnorm(0.975)
 period1 <- c("03_05", "05_06", "06_07", "07_08", "08_10", "10_11", "11_12", "12_13", "13_14")
@@ -59,30 +59,33 @@ o <- cbind(o, avgTPF)
 colnames(o)[10] <- "Average"
 
 # OR
-pp1 <- unlist(lapply(list(rand1$OR_stand, rand1$sd_stand), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
-pp2 <- unlist(lapply(list(rand6$OR_stand, rand6$sd_stand), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
-pp3 <- unlist(lapply(list(rand5$OR_stand, rand5$sd_stand), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
-pp4 <- unlist(lapply(list(rand4$OR_stand, rand4$sd_stand), function(x) as.numeric( 0 > log(unlist(x[[1]]) ) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
-pp5 <- unlist(lapply(list(rand3$OR_stand, rand3$sd_stand), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
-avgOR <- c(1 - mean(pp1), 1 - mean(pp2), 1 - mean(pp3), 1 - mean(pp4), 1 - mean(pp5))
+pp1 <- unlist(lapply(r.estNULL.4$pval_stand, function(x) x < 0.05))
+pp2 <- unlist(lapply(r.est6.4$pval_stand, function(x) x < 0.05))
+pp3 <- unlist(lapply(r.est5.4$pval_stand, function(x) x < 0.05))
+pp4 <- unlist(lapply(r.est4.4$pval_stand, function(x) x < 0.05))
+pp5 <- unlist(lapply(r.est3.4$pval_stand, function(x) x < 0.05))
+pp <- rbind(pp1, pp2, pp3, pp4, pp5)
+avgOR <- rowMeans(pp)
 
 
 # GEE
-pp1 <- unlist(lapply(list(rand1$OR_gee, rand1$sd_gee_est), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
-pp2 <- unlist(lapply(list(rand6$OR_gee, rand6$sd_gee_est), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
-pp3 <- unlist(lapply(list(rand5$OR_gee, rand5$sd_gee_est), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
-pp4 <- unlist(lapply(list(rand4$OR_gee, rand4$sd_gee_est), function(x) as.numeric( 0 > log(unlist(x[[1]]) ) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
-pp5 <- unlist(lapply(list(rand3$OR_gee, rand3$sd_gee_est), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
-avgGEE <- c(1 - mean(pp1), 1 - mean(pp2), 1 - mean(pp3), 1 - mean(pp4), 1 - mean(pp5))
+pp1 <- unlist(lapply(r.estNULL.4$pval_gee, function(x) x < 0.05))
+pp2 <- unlist(lapply(r.est6.4$pval_gee, function(x) x < 0.05))
+pp3 <- unlist(lapply(r.est5.4$pval_gee, function(x) x < 0.05))
+pp4 <- unlist(lapply(r.est4.4$pval_gee, function(x) x < 0.05))
+pp5 <- unlist(lapply(r.est3.4$pval_gee, function(x) x < 0.05))
+pp <- rbind(pp1, pp2, pp3, pp4, pp5)
+avgGEE <- rowMeans(pp)
 
 
 # ME
-pp1me <- unlist(lapply(list(rand1$OR_me, rand1$sd_me_est), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
-pp2me <- unlist(lapply(list(rand6$OR_me, rand6$sd_me_est), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
-pp3me <- unlist(lapply(list(rand5$OR_me, rand5$sd_me_est), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
-pp4me <- unlist(lapply(list(rand4$OR_me, rand4$sd_me_est), function(x) as.numeric( 0 > log(unlist(x[[1]] )) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
-pp5me <- unlist(lapply(list(rand3$OR_me, rand3$sd_me_est), function(x) as.numeric( 0 > log(unlist(x[[1]])) - zstar*unlist(x[[2]]) & 0 < log(unlist(x[[1]])) + zstar*unlist(x[[2]]) )))
-avgME <- c(1 - mean(pp1me), 1 - mean(pp2me), 1 - mean(pp3me), 1 - mean(pp4me), 1 - mean(pp5me))  
+pp1 <- unlist(lapply(r.estNULL.4$pval_me, function(x) x < 0.05))
+pp2 <- unlist(lapply(r.est6.4$pval_me, function(x) x < 0.05))
+pp3 <- unlist(lapply(r.est5.4$pval_me, function(x) x < 0.05))
+pp4 <- unlist(lapply(r.est4.4$pval_me, function(x) x < 0.05))
+pp5 <- unlist(lapply(r.est3.4$pval_me, function(x) x < 0.05))
+pp <- rbind(pp1, pp2, pp3, pp4, pp5)
+avgME <- rowMeans(pp)
 @
 
 <<powerTab, echo = FALSE, results = 'asis'>>=
