@@ -1,1 +1,2 @@
 * Parallelize/speed up ORfunction.R
+* ORfunction.R only works if the "Cluster" column is named "clust". This should be an easy change.
