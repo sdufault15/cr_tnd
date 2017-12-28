@@ -124,6 +124,11 @@ Source: CRAN
 Version: 0.2.0
 Hash: cd78381a9d3fea966ac39bd0daaf5554
 
+Package: gtools
+Source: CRAN
+Version: 3.5.0
+Hash: 471b2e2452dfb30fdc1dd6f1b567925a
+
 Package: highr
 Source: CRAN
 Version: 0.6
@@ -144,7 +149,7 @@ Package: knitr
 Source: CRAN
 Version: 1.17
 Hash: f6b2bf543ee3e25f5b92bb46f9958c5f
-Requires: digest, highr, yaml, markdown, stringr, evaluate
+Requires: digest, evaluate, highr, markdown, stringr, yaml
 
 Package: labeling
 Source: CRAN
@@ -249,8 +254,8 @@ Package: rmarkdown
 Source: CRAN
 Version: 1.6
 Hash: 40f4034a7b8e28edc2b384bdb0c4d537
-Requires: yaml, stringr, evaluate, knitr, base64enc, caTools,
-    htmltools, jsonlite, rprojroot
+Requires: base64enc, caTools, evaluate, htmltools, jsonlite, knitr,
+    rprojroot, stringr, yaml
 
 Package: rootSolve
 Source: CRAN

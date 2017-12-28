@@ -1,0 +1,195 @@
+\documentclass{article}
+\usepackage[margin = 1in]{geometry}
+\usepackage{float}
+\usepackage{placeins}
+\begin{document}
+
+\title{Permutation Example}
+\author{Suzanne Dufault}
+\date{\today}
+
+% Last Modified 11/27/2017
+% Last Modified 12/28/2017
+
+\maketitle
+
+<<r global_options, include=FALSE>>=
+knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='../graphs/', cache.path = "../cache/",
+                       warning=FALSE, message=FALSE)
+@
+
+
+\abstract{This paper explores how closely the formula derived by Nick approximates the variation in the permutation distribution for a simple example of $2m = 10$ clusters. }
+
+\section{Process}
+\begin{enumerate}
+\item I set up an example dataset for 10 clusters with variation between the clusters with respect to Cases and OFIs.  
+\item I then permuted 10 choose 5 (\Sexpr{choose(10,5)}) unique treatment allocations. 
+\item I computed the log(OR) for RR = 1 for each of the permuted allocations using 100 cases and 100 controls assigned to clusters according to their current proportions.
+\item I computed the estimate of the standard deviation of the log(OR) for each of the permuted allocations using our proposed formula.
+\item \textbf{Permutation CI} was found by marking the 2.5 and 97.5 percentiles of the log(OR) estimates.
+\item \textbf{Paper CI} was found by taking \Sexpr{qnorm(0.975)} times the average estimated standard deviation of the log(OR) according to Nick's formula. 
+\end{enumerate}
+
+<<echo = FALSE>>=
+library(gtools)
+library(xtable)
+library(RColorBrewer)
+source("../lib/paperFunction2.R")
+source('../lib/txtSetFunction.R')
+
+myColors <- brewer.pal(12, 'Set3')
+zstar <- qnorm(0.975)
+@
+
+\section{Example Dataset}
+The first 10 columns of the example dataset:
+<<cache = TRUE, echo = FALSE, eval = FALSE>>=
+clust <- seq(1:10)
+Cases <- sample(seq(from = 30, to = 75), size = 10, replace = FALSE)
+OFI <- sample(seq(from = 100, to = 250), size = 10, replace = FALSE)
+Period <- rep(1, 10)
+@
+
+<<echo = FALSE, cache = TRUE>>=
+#choose(10,5)
+tx1 <- c(rep(1,5), rep(0,5))
+txs <- matrix(rep(NA, 10), ncol = 1)
+while(ncol(unique(txs, MARGIN = 2)) < (choose(10,5)+1)){
+  tx <- permute(tx1)
+  txs <- cbind(txs, tx)
+}
+@
+
+<<echo = FALSE>>=
+# To match those in the paper (which were generated before I set the seed.)
+clust <- seq(1:10)
+Cases <- c(52, 74, 54, 72, 46, 42, 70, 50, 73, 69)
+OFI <- c(138, 212, 125, 145, 165, 194, 250, 131, 229, 156)
+Period <- rep(1,10)
+@
+
+<<echo = FALSE, results='asis'>>=
+txs <- unique(txs, MARGIN = 2)[,-is.na(txs)]
+dataFrame <- data.frame(Cluster = clust, Cases, OFI, Period, txs)
+xtable(dataFrame[1:10, 1:10], align = "ccccccccccc", digits = 0, caption  = "The first few columns of treatment assignments and corresponding Case and OFI numbers.")
+@
+
+Example contingency table using the first treatment allocation:\FloatBarrier
+
+<<echo = FALSE, results = 'asis'>>=
+t1 <- subset(dataFrame, select = c(Cases, OFI, tx))
+
+propCases <- t1$Cases/sum(t1$Cases) # proportion of cases per cluster
+propOFI <- t1$OFI/sum(t1$OFI) # proportion of OFI per cluster
+ratio <- 1
+n1 <- 100
+nControls <- ratio*n1*propOFI # assigning controls to clusters
+nStarProp <- propCases # place keeper (so as not to overwrite the original proportions)
+rrIN <- 1
+nStarProp[t1$tx == 1] <- nStarProp[t1$tx == 1]*rrIN # apply treatment to all clusters within the treatment arm
+nStarProp <- nStarProp/sum(nStarProp) # Re-standardizing proportions so they sum to 1
+nCases <- nStarProp*n1 # assigning cases to clusters
+t2 <- data.frame(Cases = round(nCases), OFI = round(nControls), tx = t1$tx)
+A <- sum(t2$Cases[t2$tx == 1])
+B <- sum(t2$OFI[t2$tx == 1])
+C <- sum(t2$Cases[t2$tx == 0])
+D <- sum(t2$OFI[t2$tx == 0])
+
+tbl <- data.frame(matrix(c(A,B,C,D), byrow = FALSE, nrow = 2))
+names(tbl) <- c("Cases", "OFI")
+rownames(tbl) <- c("Treated", "Untreated")
+xtable(tbl, caption = "Example contingency table using the first treatment allocation. The discrepancy for number of untreated individuals (99 instead of 100) is due to rounding. This can be changed, but reflects the way the function for analysis is currently set to work.", digits = 0)
+@
+
+\FloatBarrier
+\section{Test}
+<<echo = FALSE>>=
+test <- paperFunction2(dataFrame, rr = 1, period = 1, ratio = 1, ncases = 100)
+@
+
+<<tidy = TRUE>>=
+sdest <- mean(unlist(test$sd_est))
+sdest
+@
+
+The average ``paper estimated'' standard deviation is \Sexpr{sdest}.
+
+\section{Comparison with Permutation Distribution}
+<<permDist_hist, tidy = TRUE>>=
+hist(log(as.numeric(unlist(test$OR_est))), breaks = 75, col = myColors[1], axes = FALSE, main = "Permutation Distribution", xlab = "log OR", sub = "RR = 1, 252 treatment allocations")
+axis(1, at = seq(from = min(log(as.numeric(unlist(test$OR_est)))), to = max(log(as.numeric(unlist(test$OR_est)))), length.out = 10))
+axis(2)
+abline(v = quantile(log(as.numeric(unlist(test$OR_est))), c(0.025, 0.975)), lty = 'dashed', col = myColors[6])
+abline(v = c(mean(log(unlist(test$OR_est))) + zstar*sdest, mean(log(unlist(test$OR_est))) - zstar*sdest), lty = 'dotted')
+legend('topright', legend = c("(0.25, 0.975) Permutation Percentiles", "mean(logOR) +/- 1.96*Average Paper Estimate of SD"), lty = c(2,3), col = c(myColors[6], 'black'), cex = 0.7)
+@
+\FloatBarrier
+
+<<echo = FALSE, results = 'asis'>>=
+CIpaper <- c(mean(log(unlist(test$OR_est))) - zstar*sdest, mean(log(unlist(test$OR_est))) + zstar*sdest)
+CIperm <- c(quantile(log(as.numeric(unlist(test$OR_est))), 0.025), quantile(log(as.numeric(unlist(test$OR_est))), 0.975))
+tb <- rbind(CIperm, CIpaper)
+rownames(tb) <- c("Permutation 95% CI", "Paper 95% CI")
+xtable(tb, align = "l|cc", digits = 10, caption = "Comparison of the Wald-style interval from our proposed standard deviation estimates and the .25 and .975 percentiles of the OR permutation distribution.")
+@
+
+\FloatBarrier
+There is a \Sexpr{(quantile(log(as.numeric(unlist(test$OR_est))), 0.975) - mean(log(unlist(test$OR_est))) + zstar*sdest)/(quantile(log(as.numeric(unlist(test$OR_est))), 0.975))[[1]]}\% discrepancy between our estimate and the truth.
+
+\section{Standard Deviation Comparisons}
+When:
+
+\begin{itemize}
+\item RR = 1
+\item nControls = 100 (i.e. ratio of cases to controls = 1)
+\item nCases = 100
+\end{itemize}
+
+<<echo = FALSE>>=
+library(geepack)
+library(lme4)
+source('../lib/ORfunction.R')
+names(dataFrame)[1] <- "clust"
+m <- ORTestFunction(dataFrame, rrIN = 1, period = 1, n1 = 100, ratio = 1)
+@
+
+\FloatBarrier
+<<echo = FALSE, results = 'asis'>>=
+perm <- sd(unlist(test$OR_est)) #permutation estimate of standard deviation (sqrt of sample variance) 
+paper <- mean(as.numeric(unlist(test$sd_est)))# average paper estimate of standard deviation
+gee <- mean(unlist(m$sd_gee_est))
+me <- mean(unlist(m$sd_me_est))
+
+sds <- rbind(perm, paper, gee, me)
+dimnames(sds) <- list(c("Permutation", "Paper", "GEE", "ME"), "Standard Deviation Estimate")
+xtable(sds, align = "l|c", digits = 5, caption = "Comparison of our proposed method (Paper), GEE, and ME standard deviation estimation with the true standard deviation of the permutation distribution (Permutation).")
+@
+\FloatBarrier
+
+When:
+\begin{itemize}
+\item RR = 1
+\item nControls = 1000 (i.e. ratio of cases to controls is 1)
+\item nCases = 1000
+\end{itemize}
+<<echo = FALSE>>=
+paper <- paperFunction2(dataFrame, rr = 1, period = 1, ratio = 1, ncases = 1000)
+m2 <- ORTestFunction(dataFrame, 1, period = 1, n1 = 1000, ratio = 1)
+@
+
+\FloatBarrier
+<<echo = FALSE, results = 'asis'>>=
+permsd <- sd(unlist(paper$OR_est)) 
+papersd <- mean(unlist(paper$sd_est))
+gee <- mean(unlist(m2$sd_gee_est))
+me <- mean(unlist(m2$sd_me_est))
+
+sds <- rbind(permsd, papersd, gee, me)
+dimnames(sds) <- list(c("Permutation", "Paper", "GEE", "ME"), "Standard Deviation Estimate")
+xtable(sds, align = "l|c", digits = 5, caption = "Comparison of our proposed method (Paper), GEE, and ME standard deviation estimation with the true standard deviation of the permutation distribution (Permutation). This is at the null for the setting where nControls = nCases = 1000.")
+@
+\FloatBarrier
+
+When $2m = 10$ GEE and ME appear to do a poor job estimating the permutation distribution. However, as the number of cases and controls increase, mixed effect modeling (with random effects at the cluster level) improves with respect to approximating the permutation distribution. 
+\end{document}
