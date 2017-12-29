@@ -1,5 +1,5 @@
 ## Introduction
-This repository holds all of the code necessary to recreate the analysis done in *Analysis of Cluster Randomized Test Negative Designs: Cluster-Level Methods*. 
+This repository holds all of the code necessary to recreate the analysis done in *Analysis of Cluster Randomized Test-Negative Designs: Cluster-Level Methods*. 
 
 ## Details
 This project was completed using R 3.3.1 (Bug in Your Hair). I have attempted to use `packrat` to keep a history of the package versions used in these analyses. This information is stored in the folder labeled **packrat**. 
