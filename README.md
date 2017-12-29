@@ -7,7 +7,7 @@ This project was completed using R 3.3.1 (Bug in Your Hair). I have attempted to
 The .Rnw files are compiled with `knitr` and make use of `pdflatex` to compile.
 
 ## Project Layout
-This repository adopted the formatting used by the `ProjectTemplate` package.
+This repository adopted/modified the formatting used by the `ProjectTemplate` package.
 
 To load the project change `setwd()` to the location 
 where this README file is located. Then run the following two
