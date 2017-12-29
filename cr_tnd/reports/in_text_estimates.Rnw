@@ -1,0 +1,141 @@
+\documentclass{article}
+\usepackage{placeins}
+\usepackage{float}
+\usepackage[margin = 1in]{geometry}
+
+
+<<r global_options, include=FALSE>>=
+knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='../graphs/', cache.path = '../cache/',
+                       warning=FALSE, message=FALSE)
+@
+
+\title{In-Text Estimates for CR-TND Paper - SIMULATIONS}
+\date{\today}
+\author{Suzanne Dufault}
+
+\begin{document}
+
+\maketitle
+
+
+<<echo = FALSE>>=
+library(xtable)
+setwd("../../dec17/")
+# Using data from proportion-significant.R
+load("tNULLr_12192017.RData")
+load("t60r_12192017.RData")
+load("t50r_12192017.RData")
+load("t40r_12192017.RData")
+load("t30r_12192017.RData")
+
+load("orNULLr_12192017.RData")
+load("or6r_12192017.RData")
+load("or5r_12192017.RData")
+load("or4r_12192017.RData")
+load("or3r_12192017.RData")
+
+load("r_estNULL_4_12222017.RData")
+load("r_est6_4_12222017.RData")
+load("r_est5_4_12222017.RData")
+load("r_est4_4_12222017.RData")
+load("r_est3_4_12222017.RData")
+
+zstar <- qnorm(0.975)
+period1 <- c("03_05", "05_06", "06_07", "07_08", "08_10", "10_11", "11_12", "12_13", "13_14")
+@
+
+<<power, echo = FALSE, results = 'asis'>>=
+# Test Positive
+pp1 <- (unlist(lapply(tNULLr$pVals, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
+names(pp1) <- c(paste0(period1)) 
+pp2 <- (unlist(lapply(t60r$pVals, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
+pp3 <- (unlist(lapply(t50r$pVals, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
+pp4 <- (unlist(lapply(t40r$pVals, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
+pp5 <- (unlist(lapply(t30r$pVals, function(x) sum(unlist(x) <= 0.05)/length(unlist(x)))))
+pp <- rbind(pp1,pp2, pp3, pp4, pp5)
+rownames(pp) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
+pp <- cbind(pp, rowMeans(pp))
+colnames(pp)[10] <- "Average"
+xtable(pp, caption = "The period specific estimates of the proportion of significant results at each lambda for the Test-Positive Fraction Method.", digits = 4)
+
+# OR - ABGH Method
+pp1 <- unlist(lapply(nullRAND$insignificance, function(x) mean(unlist(1-x))))
+names(pp1) <- c(paste0(period1)) 
+pp2 <- unlist(lapply(t6RAND$insignificance, function(x) mean(unlist(1-x))))
+pp3 <- unlist(lapply(t5RAND$insignificance, function(x) mean(unlist(1-x))))
+pp4 <- unlist(lapply(t4RAND$insignificance, function(x) mean(unlist(1-x))))
+pp5 <- unlist(lapply(t3RAND$insignificance, function(x) mean(unlist(1-x))))
+pp <- rbind(pp1, pp2, pp3, pp4, pp5)
+avgOR <- rowMeans(pp)
+rownames(pp) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
+pp <- cbind(pp, rowMeans(pp))
+colnames(pp)[10] <- "Average"
+xtable(pp, caption = "The period specific estimates of the proportion of significant results at each lambda for the proposed Odds Ratio Method.", digits = 4)
+@
+
+<<echo = FALSE, results = 'asis'>>=
+# OR - ABGH Method
+pp1 <- unlist(lapply(nullRAND$OR_est, function(x) mean(x) - 1))
+names(pp1) <- c(paste0(period1)) 
+pp2 <- unlist(lapply(t6RAND$OR_est, function(x) mean(x) - 0.6))
+pp3 <- unlist(lapply(t5RAND$OR_est, function(x) mean(x) - 0.5))
+pp4 <- unlist(lapply(t4RAND$OR_est, function(x) mean(x) - 0.4))
+pp5 <- unlist(lapply(t3RAND$OR_est, function(x) mean(x) - 0.3))
+pp <- rbind(pp1, pp2, pp3, pp4, pp5)
+avgOR <- rowMeans(pp)
+rownames(pp) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
+pp <- cbind(pp, rowMeans(pp))
+colnames(pp)[10] <- "Average"
+xtable(pp, caption = "The period specific estimates of bias at each lambda for the proposed Odds Ratio Method.", digits = 4)
+
+# Standard Deviation
+pp1 <- (unlist(lapply(nullRAND$sd_est, function(x) mean(x))))
+names(pp1) <- c(paste0(period1)) 
+pp2 <- (unlist(lapply(t6RAND$sd_est, function(x) mean(x))))
+pp3 <- (unlist(lapply(t5RAND$sd_est, function(x) mean(x))))
+pp4 <- (unlist(lapply(t4RAND$sd_est, function(x) mean(x))))
+pp5 <- (unlist(lapply(t3RAND$sd_est, function(x) mean(x))))
+sd <- rbind(pp1,pp2, pp3, pp4, pp5)
+rownames(sd) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
+sd <- cbind(sd, c(sd(log(unlist(nullRAND$OR_est))), sd(log(unlist(t6RAND$OR_est))), sd(log(unlist(t5RAND$OR_est))), sd(log(unlist(t4RAND$OR_est))), sd(log(unlist(t3RAND$OR_est)))))
+sd <- cbind(sd, c(mean(unlist(nullRAND$sd_est)), mean(unlist(t6RAND$sd_est)), mean(unlist(t5RAND$sd_est)), mean(unlist(t4RAND$sd_est)), mean(unlist(t3RAND$sd_est))))
+colnames(sd)[10] <- "True"
+colnames(sd)[11] <- "Average"
+xtable(sd, caption = "The period specific estimates of the standard deviation of log(lambda) for the proposed Odds Ratio method.", digits = 4)
+@
+
+<<welch_satt, echo = FALSE, cache = TRUE>>=
+source("../lib/tTestFunction_ws.R")
+source("../lib/txtSetFunction.R")
+source("../lib/quadraticFunction.R")
+load("../cache/Random10000Allocations.RData")
+dataRAND <- Random10000Allocations
+
+# The bias for the test-positive fraction quadratic estimates of the Relative Risk and the standard deviation 
+# of the difference in arm-specific averages (T) from 10,000 unconstrained intervention allocations. 
+
+# Ratio = 1
+tNULLr.2.1 <- tTestFunction(dataRAND, rrIN = 1, period = period1, ncases = 1000, ratio = 1)
+t60r.2.1 <- tTestFunction(dataRAND, rrIN = 0.6, period = period1, ncases = 1000, ratio = 1)
+t50r.2.1 <- tTestFunction(dataRAND, rrIN = 0.5, period = period1, ncases = 1000, ratio = 1)
+t40r.2.1 <- tTestFunction(dataRAND, rrIN = 0.4, period = period1, ncases = 1000, ratio = 1)
+t30r.2.1 <- tTestFunction(dataRAND, rrIN = 0.3, period = period1, ncases = 1000, ratio = 1)
+
+# Ratio = 4
+tNULLr.2 <- tTestFunction(dataRAND, rrIN = 1, period = period1, ncases = 1000, ratio = 4) 
+t60r.2 <- tTestFunction(dataRAND, rrIN = 0.6, period = period1, ncases = 1000, ratio = 4)
+t50r.2 <- tTestFunction(dataRAND, rrIN = 0.5, period = period1, ncases = 1000, ratio = 4)
+t40r.2 <- tTestFunction(dataRAND, rrIN = 0.4, period = period1, ncases = 1000, ratio = 4)
+t30r.2 <- tTestFunction(dataRAND, rrIN = 0.3, period = period1, ncases = 1000, ratio = 4)
+@
+
+<<echo = FALSE, results = 'asis'>>=
+# TPM (ratio = 1 and 4)
+covP <- cbind(c(mean(unlist(tNULLr.2.1$coverage)), mean(unlist(t60r.2.1$coverage)), mean(unlist(t50r.2.1$coverage)), mean(unlist(t40r.2.1$coverage)), mean(unlist(t30r.2.1$coverage))) ,c(mean(unlist(tNULLr.2$coverage)), mean(unlist(t60r.2$coverage)), mean(unlist(t50r.2$coverage)), mean(unlist(t40r.2$coverage)), mean(unlist(t30r.2$coverage))))
+colnames(covP) <- c("Ratio = 1", "Ratio = 4")
+rownames(covP) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
+xtable(covP, digits = 4, caption = "The coverage for the Welch-Satterthwaite adjustment of the Test-Positive Method.")
+@
+
+
+\end{document}
