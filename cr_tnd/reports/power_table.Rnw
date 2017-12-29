@@ -46,12 +46,12 @@ period1 <- c("03_05", "05_06", "06_07", "07_08", "08_10", "10_11", "11_12", "12_
 
 <<power, echo = FALSE>>=
 # Test Positive
-o1 <- (unlist(lapply(nullRAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
+o1 <- (unlist(lapply(tNULLr$pVals, function(x) x <= 0.05)))
 names(o1) <- c(paste0(period1)) 
-o2 <- (unlist(lapply(t6RAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
-o3 <- (unlist(lapply(t5RAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
-o4 <- (unlist(lapply(t4RAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
-o5 <- (unlist(lapply(t3RAND$insignificance, function(x) 1 - sum(unlist(x))/length(unlist(x)))))
+o2 <- (unlist(lapply(t60r$pVals, function(x) x <= 0.05)))
+o3 <- (unlist(lapply(t50r$pVals, function(x) x <= 0.05)))
+o4 <- (unlist(lapply(t40r$pVals, function(x) x <= 0.05)))
+o5 <- (unlist(lapply(t30r$pVals, function(x) x <= 0.05)))
 o <- rbind(o1,o2, o3, o4, o5)
 avgTPF <- rowMeans(o)
 rownames(o) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
