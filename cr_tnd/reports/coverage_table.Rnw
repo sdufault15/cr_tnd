@@ -16,7 +16,7 @@ knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='../graphs/',
 
 <<echo = FALSE>>=
 library(xtable)
-setwd("../../dec17/")
+setwd("~/Box Sync/Research/TND_CRT_Paper1_2017/CR_TND/dec17/")
 zstar <- qnorm(0.975)
 period1 <- c("03_05", "05_06", "06_07", "07_08", "08_10", "10_11", "11_12", "12_13", "13_14")
 
@@ -87,10 +87,10 @@ r1 <- c(aa,bb,cc,dd,ee)
 
 # Random Effects Method
 aa <- mean(log(1) <= log(unlist(r.estNULL.1$OR_me)) + zstar*unlist(r.estNULL.1$sd_me_est) & log(1) >= log(unlist(r.estNULL.1$OR_me)) - zstar*unlist(r.estNULL.1$sd_me_est)) # across all periods
-bb <- mean(log(0.6) <= log(unlist(r.est6.1$OR_me)) + zstar*unlist(r.est6.1$sd_me_est) & log(1) >= log(unlist(r.est6.1$OR_me)) - zstar*unlist(r.est6.1$sd_me_est)) # across all periods
-cc <- mean(log(0.5) <= log(unlist(r.est5.1$OR_me)) + zstar*unlist(r.est5.1$sd_me_est) & log(1) >= log(unlist(r.est5.1$OR_me)) - zstar*unlist(r.est5.1$sd_me_est)) # across all periods
-dd <- mean(log(0.4) <= log(unlist(r.est4.1$OR_me)) + zstar*unlist(r.est4.1$sd_me_est) & log(1) >= log(unlist(r.est4.1$OR_me)) - zstar*unlist(r.est4.1$sd_me_est)) # across all periods
-ee <- mean(log(0.3) <= log(unlist(r.est3.1$OR_me)) + zstar*unlist(r.est3.1$sd_me_est) & log(1) >= log(unlist(r.est3.1$OR_me)) - zstar*unlist(r.est3.1$sd_me_est)) # across all periods
+bb <- mean(log(0.6) <= log(unlist(r.est6.1$OR_me)) + zstar*unlist(r.est6.1$sd_me_est) & log(0.6) >= log(unlist(r.est6.1$OR_me)) - zstar*unlist(r.est6.1$sd_me_est)) # across all periods
+cc <- mean(log(0.5) <= log(unlist(r.est5.1$OR_me)) + zstar*unlist(r.est5.1$sd_me_est) & log(0.5) >= log(unlist(r.est5.1$OR_me)) - zstar*unlist(r.est5.1$sd_me_est)) # across all periods
+dd <- mean(log(0.4) <= log(unlist(r.est4.1$OR_me)) + zstar*unlist(r.est4.1$sd_me_est) & log(0.4) >= log(unlist(r.est4.1$OR_me)) - zstar*unlist(r.est4.1$sd_me_est)) # across all periods
+ee <- mean(log(0.3) <= log(unlist(r.est3.1$OR_me)) + zstar*unlist(r.est3.1$sd_me_est) & log(0.3) >= log(unlist(r.est3.1$OR_me)) - zstar*unlist(r.est3.1$sd_me_est)) # across all periods
 
 r1re <- c(aa,bb,cc,dd,ee)
 
@@ -98,19 +98,19 @@ r1re <- c(aa,bb,cc,dd,ee)
 
 # Ratio = 4
 aa <- mean(log(1) <= log(unlist(biasOR.paper.NULL$OR_est)) + zstar*unlist(biasOR.paper.NULL$sd_est) & log(1) >= log(unlist(biasOR.paper.NULL$OR_est)) - zstar*unlist(biasOR.paper.NULL$sd_est)) # across all periods
-bb <- mean(log(0.6) <= log(unlist(biasOR.paper.6$OR_est)) + zstar*unlist(biasOR.paper.6$sd_est) & log(1) >= log(unlist(biasOR.paper.6$OR_est)) - zstar*unlist(biasOR.paper.6$sd_est)) # across all periods
-cc <- mean(log(0.5) <= log(unlist(biasOR.paper.5$OR_est)) + zstar*unlist(biasOR.paper.5$sd_est) & log(1) >= log(unlist(biasOR.paper.5$OR_est)) - zstar*unlist(biasOR.paper.5$sd_est)) # across all periods
-dd <- mean(log(0.4) <= log(unlist(biasOR.paper.4$OR_est)) + zstar*unlist(biasOR.paper.4$sd_est) & log(1) >= log(unlist(biasOR.paper.4$OR_est)) - zstar*unlist(biasOR.paper.4$sd_est)) # across all periods
-ee <- mean(log(0.3) <= log(unlist(biasOR.paper.3$OR_est)) + zstar*unlist(biasOR.paper.3$sd_est) & log(1) >= log(unlist(biasOR.paper.3$OR_est)) - zstar*unlist(biasOR.paper.3$sd_est)) # across all periods
+bb <- mean(log(0.6) <= log(unlist(biasOR.paper.6$OR_est)) + zstar*unlist(biasOR.paper.6$sd_est) & log(0.6) >= log(unlist(biasOR.paper.6$OR_est)) - zstar*unlist(biasOR.paper.6$sd_est)) # across all periods
+cc <- mean(log(0.5) <= log(unlist(biasOR.paper.5$OR_est)) + zstar*unlist(biasOR.paper.5$sd_est) & log(0.5) >= log(unlist(biasOR.paper.5$OR_est)) - zstar*unlist(biasOR.paper.5$sd_est)) # across all periods
+dd <- mean(log(0.4) <= log(unlist(biasOR.paper.4$OR_est)) + zstar*unlist(biasOR.paper.4$sd_est) & log(0.4) >= log(unlist(biasOR.paper.4$OR_est)) - zstar*unlist(biasOR.paper.4$sd_est)) # across all periods
+ee <- mean(log(0.3) <= log(unlist(biasOR.paper.3$OR_est)) + zstar*unlist(biasOR.paper.3$sd_est) & log(0.3) >= log(unlist(biasOR.paper.3$OR_est)) - zstar*unlist(biasOR.paper.3$sd_est)) # across all periods
 
 r2 <- c(aa,bb,cc,dd,ee)# OF COURSE THEY ARE THE SAME...
 
 ## Random Effects
 aa <- mean(log(1) <= log(unlist(r.estNULL.4$OR_me)) + zstar*unlist(r.estNULL.4$sd_me_est) & log(1) >= log(unlist(r.estNULL.4$OR_me)) - zstar*unlist(r.estNULL.4$sd_me_est)) # across all periods
-bb <- mean(log(0.6) <= log(unlist(r.est6.4$OR_me)) + zstar*unlist(r.est6.4$sd_me_est) & log(1) >= log(unlist(r.est6.4$OR_me)) - zstar*unlist(r.est6.4$sd_me_est)) # across all periods
-cc <- mean(log(0.5) <= log(unlist(r.est5.4$OR_me)) + zstar*unlist(r.est5.4$sd_me_est) & log(1) >= log(unlist(r.est5.4$OR_me)) - zstar*unlist(r.est5.4$sd_me_est)) # across all periods
-dd <- mean(log(0.4) <= log(unlist(r.est4.4$OR_me)) + zstar*unlist(r.est4.4$sd_me_est) & log(1) >= log(unlist(r.est4.4$OR_me)) - zstar*unlist(r.est4.4$sd_me_est)) # across all periods
-ee <- mean(log(0.3) <= log(unlist(r.est3.4$OR_me)) + zstar*unlist(r.est3.4$sd_me_est) & log(1) >= log(unlist(r.est3.4$OR_me)) - zstar*unlist(r.est3.4$sd_me_est)) # across all periods
+bb <- mean(log(0.6) <= log(unlist(r.est6.4$OR_me)) + zstar*unlist(r.est6.4$sd_me_est) & log(0.6) >= log(unlist(r.est6.4$OR_me)) - zstar*unlist(r.est6.4$sd_me_est)) # across all periods
+cc <- mean(log(0.5) <= log(unlist(r.est5.4$OR_me)) + zstar*unlist(r.est5.4$sd_me_est) & log(0.5) >= log(unlist(r.est5.4$OR_me)) - zstar*unlist(r.est5.4$sd_me_est)) # across all periods
+dd <- mean(log(0.4) <= log(unlist(r.est4.4$OR_me)) + zstar*unlist(r.est4.4$sd_me_est) & log(0.4) >= log(unlist(r.est4.4$OR_me)) - zstar*unlist(r.est4.4$sd_me_est)) # across all periods
+ee <- mean(log(0.3) <= log(unlist(r.est3.4$OR_me)) + zstar*unlist(r.est3.4$sd_me_est) & log(0.3) >= log(unlist(r.est3.4$OR_me)) - zstar*unlist(r.est3.4$sd_me_est)) # across all periods
 
 r2re <- c(aa,bb,cc,dd,ee)
 @
@@ -121,8 +121,7 @@ xtable(tbl, align = c("cc|cc|cc"), caption = "The coverage averaged across the 1
 @
 
 
-
-
+\textbf{Update:} (October 28, 2018) In double checking my code, I found a slight error in the calculation of the coverage for the random effects models. It has been corrected and the corrected results are now reflected here. Overall, coverage decreased slightly for the random effects models from approximately 0.96 to 0.93 (away from the null).. 
 
 
 \end{document}

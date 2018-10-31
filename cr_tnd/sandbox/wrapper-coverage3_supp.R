@@ -1,0 +1,11 @@
+setwd("~/cr_tnd/dec17supp/")
+period1 <- c("03_05", "05_06", "06_07", "07_08", "08_10", "10_11", "11_12", "12_13", "13_14")
+zstar <- qnorm(0.975)
+
+source("~/cr_tnd/paperFunction2.R")
+source("~/cr_tnd/quadraticFunction.R")
+source("~/cr_tnd/txtSetFunction.R")
+library(readr)
+dataFINAL <- read_csv("~/Box Sync/Research/TND_CRT_Paper1_2017/CR_TND/cr_tnd/data/Final247Allocations.csv")
+dataFINAL <- subset(dataFINAL, select = -c(X1))
+source("~/cr_tnd/coverage3_1_supp.R")

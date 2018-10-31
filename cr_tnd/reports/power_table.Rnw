@@ -79,11 +79,11 @@ avgGEE <- rowMeans(pp)
 
 
 # ME
-pp1 <- unlist(lapply(r.estNULL.4$pval_me, function(x) x < 0.05))
-pp2 <- unlist(lapply(r.est6.4$pval_me, function(x) x < 0.05))
-pp3 <- unlist(lapply(r.est5.4$pval_me, function(x) x < 0.05))
-pp4 <- unlist(lapply(r.est4.4$pval_me, function(x) x < 0.05))
-pp5 <- unlist(lapply(r.est3.4$pval_me, function(x) x < 0.05))
+pp1 <- unlist(lapply(r.estNULL.4$pval_me, function(x) x <= 0.05))
+pp2 <- unlist(lapply(r.est6.4$pval_me, function(x) x <= 0.05))
+pp3 <- unlist(lapply(r.est5.4$pval_me, function(x) x <= 0.05))
+pp4 <- unlist(lapply(r.est4.4$pval_me, function(x) x <= 0.05))
+pp5 <- unlist(lapply(r.est3.4$pval_me, function(x) x <= 0.05))
 pp <- rbind(pp1, pp2, pp3, pp4, pp5)
 avgME <- rowMeans(pp)
 @
