@@ -75,7 +75,9 @@ paperFunction2 <- function(dF, rr, period, ratio, ncases){
     
     # Paper Significance
     OR_est1 <- lambdaHat
-    sig1 <- (0 <= log(OR_est1) + zstar*sd1 & 0 >= log(OR_est1) - zstar*sd1)
+    sig1 <- between(0,
+                    log(OR_est1) - zstar*sd1,
+                        log(OR_est1) + zstar*sd1)
     if (is.nan(sd1) == TRUE){sig1 <- FALSE}
     
     OR_est <- rbind(OR_est, OR_est1)
