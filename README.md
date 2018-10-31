@@ -1,5 +1,5 @@
 ## Introduction
-This repository holds all of the code necessary to recreate the analysis done in *Analysis of Cluster Randomized Test Negative Designs: Cluster-Level Methods*.
+This repository holds all of the code necessary to recreate the analysis done in [*Analysis of Cluster Randomized Test-Negative Designs: Cluster-Level Methods*](https://academic.oup.com/biostatistics/advance-article-abstract/doi/10.1093/biostatistics/kxy005/4852819), published in *Biostatistics* (2018).  
 
 ## Details
 This project was completed using R 3.3.1 (Bug in Your Hair). I have attempted to use `packrat` to keep a history of the package versions used in these analyses. This information is stored in the folder labeled **packrat**. 
@@ -7,7 +7,7 @@ This project was completed using R 3.3.1 (Bug in Your Hair). I have attempted to
 The .Rnw files are compiled with `knitr` and make use of `pdflatex` to compile.
 
 ## Project Layout
-This repository adopted the formatting used by the `ProjectTemplate` package.
+This repository adopted/modified the formatting used by the `ProjectTemplate` package.
 
 To load the project change `setwd()` to the location 
 where this README file is located. Then run the following two
@@ -31,3 +31,6 @@ Overview of the contents of this repository:
 * **docs** contains pdf versions of the reports generated in **reports**.
 * **sandbox** contains on-going work regarding the analysis.
 * **packrat** contains the versions of the packages used in this analysis.
+
+## Final Thoughts
+There are still quite a few things on my to-do list with respect to making the code more computationally efficient and user friendly. However, the structure here should be sufficient and reliable with respect to generating the results in the paper.
