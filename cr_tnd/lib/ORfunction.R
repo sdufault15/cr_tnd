@@ -1,9 +1,7 @@
 # Modified so that this only evaluates treatment in 1 arm
 # Modified to return p-values
-# LAST EDIT: 12/22/17
-library(splitstackshape)
-library(dplyr)
-library(tidyr)
+# Modified to use dplyr and tidyr cleaner code
+# LAST EDIT: 12/22/17 11/01/18
 
 ORTestFunction <- function(dF, rrIN, period, n1 = 1000, ratio = 4){
   # 'dta' is a matrix/dataframe containing cluster, case and control data, corresponding time periods and treatment allocations
@@ -52,6 +50,7 @@ ORTestFunction <- function(dF, rrIN, period, n1 = 1000, ratio = 4){
       propOFI <- dta$OFI/sum(dta$OFI) # proportion of OFI per cluster
       nControls <- ratio*n1*propOFI # assigning controls to clusters
       nStarProp <- propCases # place keeper (so as not to overwrite the original proportions)
+
       nStarProp[txDta == 1] <- nStarProp[txDta == 1]*rrIN # apply treatment to all clusters within the treatment arm
       nStarProp <- nStarProp/sum(nStarProp) # Re-standardizing proportions so they sum to 1
       nCases <- nStarProp*n1 # assigning cases to clusters

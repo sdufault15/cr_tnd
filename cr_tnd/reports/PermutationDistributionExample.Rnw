@@ -35,6 +35,8 @@ knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='../graphs/', cache.p
 library(gtools)
 library(xtable)
 library(RColorBrewer)
+library(tidyverse)
+library(splitstackshape)
 source("../lib/paperFunction2.R")
 source('../lib/txtSetFunction.R')
 
@@ -116,13 +118,13 @@ sdest
 The average ``paper estimated'' standard deviation is \Sexpr{sdest}.
 
 \section{Comparison with Permutation Distribution}
-<<permDist_hist, tidy = TRUE>>=
+<<permDist_hist, tidy = TRUE, echo = FALSE>>=
 hist(log(as.numeric(unlist(test$OR_est))), breaks = 75, col = myColors[1], axes = FALSE, main = "Permutation Distribution", xlab = "log OR", sub = "RR = 1, 252 treatment allocations")
-axis(1, at = seq(from = min(log(as.numeric(unlist(test$OR_est)))), to = max(log(as.numeric(unlist(test$OR_est)))), length.out = 10))
+axis(1, at = round(seq(from = min(log(as.numeric(unlist(test$OR_est)))), to = max(log(as.numeric(unlist(test$OR_est)))), length.out = 10), 3))
 axis(2)
 abline(v = quantile(log(as.numeric(unlist(test$OR_est))), c(0.025, 0.975)), lty = 'dashed', col = myColors[6])
 abline(v = c(mean(log(unlist(test$OR_est))) + zstar*sdest, mean(log(unlist(test$OR_est))) - zstar*sdest), lty = 'dotted')
-legend('topright', legend = c("(0.25, 0.975) Permutation Percentiles", "mean(logOR) +/- 1.96*Average Paper Estimate of SD"), lty = c(2,3), col = c(myColors[6], 'black'), cex = 0.7)
+legend('topright', legend = c("(0.25, 0.975) Permutation Percentiles", "mean(logOR) +/- 1.96*Average proposed \nOR Estimate of SD"), lty = c(2,3), col = c(myColors[6], 'black'), cex = 0.7)
 @
 \FloatBarrier
 
