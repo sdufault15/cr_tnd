@@ -34,14 +34,14 @@ source("~/cr_tnd/txtSetFunction.R")
 or3_300 <- ORTestFunction(dta, rrIN = 0.3, period = period1, ratio = 4, n1 = 300)
 save(or3_300, file = "oct18/or3_300_11012018.RData")
 
-or3_400 <- paperFunction2(dta, rrIN = 0.3, period = period1, ratio = 4, n1 = 400)
+or3_400 <- ORTestFunction(dta, rrIN = 0.3, period = period1, ratio = 4, n1 = 400)
 save(or3_400, file = "oct18/or3_400_11012018.RData")
 
-or3_500 <- paperFunction2(dta, rrIN = 0.3, period = period1, ratio = 4, n1 = 500)
+or3_500 <- ORTestFunction(dta, rrIN = 0.3, period = period1, ratio = 4, n1 = 500)
 save(or3_500, file = "oct18/or3_500_11012018.RData")
 
-or3_600 <- paperFunction2(dta, rrIN = 0.3, period = period1, ratio = 4, n1 = 600)
+or3_600 <- ORTestFunction(dta, rrIN = 0.3, period = period1, ratio = 4, n1 = 600)
 save(or3_600, file = "oct18/or3_600_11012018.RData")
 
-or3_700 <- paperFunction2(dta, rrIN = 0.3, period = period1, ratio = 4, n1 = 700)
+or3_700 <- ORTestFunction(dta, rrIN = 0.3, period = period1, ratio = 4, n1 = 700)
 save(or3_700, file = "oct18/or3_700_11012018.RData")

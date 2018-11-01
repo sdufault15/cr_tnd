@@ -67,15 +67,15 @@ ORTestFunction <- function(dF, rrIN, period, n1 = 1000, ratio = 4){
       g1 <- geeglm(Status ~ Treatment, data = tempLong, family = binomial, id = Cluster, corstr = "exchangeable", scale.fix = TRUE)
       me1 <- glmer(Status ~ Treatment + (1 | Cluster ), family = binomial, data = tempLong) 
         
-      ORgee <- rbind(ORgee, exp(summary(g1)$coefficients[2,1])) # Unlogged ORs
-      ORme <- rbind(ORme, exp(summary(me1)$coefficients[2]))
-      ORstand <- rbind(ORstand, exp(summary(mod1)$coefficients[2]))
-      sdGEE <- rbind(sdGEE, summary(g1)$coefficients[2,2]) # Logged SDs
-      sdME <- rbind(sdME, summary(me1)$coefficients[4])
-      sdStand <- rbind(sdStand, summary(mod1)$coefficients[4])
-      pvalGEE <- rbind(pvalGEE, summary(g1)$coefficients[2,4]) # Coefficient p-vals (log scale)
-      pvalME <- rbind(pvalME, summary(me1)$coefficients[2,4])
-      pvalStand <- rbind(pvalStand, summary(mod1)$coefficients[2,4])
+      ORgee <- rbind(ORgee, exp(summary(g1)$coefficients["Treatment",1])) # Unlogged ORs
+      ORme <- rbind(ORme, exp(summary(me1)$coefficients["Treatment", 1]))
+      ORstand <- rbind(ORstand, exp(summary(mod1)$coefficients["Treatment",1]))
+      sdGEE <- rbind(sdGEE, summary(g1)$coefficients["Treatment",2]) # Logged SDs
+      sdME <- rbind(sdME, summary(me1)$coefficients["Treatment", 2])
+      sdStand <- rbind(sdStand, summary(mod1)$coefficients["Treatment", 2])
+      pvalGEE <- rbind(pvalGEE, summary(g1)$coefficients["Treatment", 4]) # Coefficient p-vals (log scale)
+      pvalME <- rbind(pvalME, summary(me1)$coefficients["Treatment", 4])
+      pvalStand <- rbind(pvalStand, summary(mod1)$coefficients["Treatment", 4])
     }
     geeORMatrix[[iter1]] <- ORgee
     meORMatrix[[iter1]] <- ORme
