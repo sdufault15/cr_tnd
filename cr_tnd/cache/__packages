@@ -3,3 +3,14 @@ knitr
 gtools
 xtable
 RColorBrewer
+tidyverse
+ggplot2
+tibble
+tidyr
+readr
+purrr
+dplyr
+stringr
+forcats
+splitstackshape
+here
