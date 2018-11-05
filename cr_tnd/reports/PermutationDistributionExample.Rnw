@@ -37,8 +37,9 @@ library(xtable)
 library(RColorBrewer)
 library(tidyverse)
 library(splitstackshape)
-source("../lib/paperFunction2.R")
-source('../lib/txtSetFunction.R')
+library(here)
+source(here("cr_tnd", "lib/paperFunction2.R"))
+source(here("cr_tnd", "lib/txtSetFunction.R"))
 
 myColors <- brewer.pal(12, 'Set3')
 zstar <- qnorm(0.975)
@@ -58,7 +59,7 @@ Period <- rep(1, 10)
 tx1 <- c(rep(1,5), rep(0,5))
 txs <- matrix(rep(NA, 10), ncol = 1)
 while(ncol(unique(txs, MARGIN = 2)) < (choose(10,5)+1)){
-  tx <- permute(tx1)
+  tx <- gtools::permute(tx1)
   txs <- cbind(txs, tx)
 }
 @
@@ -151,7 +152,7 @@ When:
 <<echo = FALSE>>=
 library(geepack)
 library(lme4)
-source('../lib/ORfunction.R')
+source(here("cr_tnd", "lib/ORfunction.R"))
 names(dataFrame)[1] <- "clust"
 m <- ORTestFunction(dataFrame, rrIN = 1, period = 1, n1 = 100, ratio = 1)
 @
