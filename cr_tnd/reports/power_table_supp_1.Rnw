@@ -17,10 +17,13 @@ knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='Figs/',
 
 \maketitle
 
+\section{OUTDATED TABLE}
+December 29, 2017. This table has been updated. \FloatBarrier
 
 <<echo = FALSE>>=
 library(xtable)
-setwd("../../dec17/")
+library(here)
+setwd(here("dec17"))
 # Using data from proportion-significant.R
 # TPF
 load("randomNULLtTest1_12192017.Rdata")
@@ -81,6 +84,87 @@ avgGEE <- rowMeans(pp)
 
 
 # ME
+pp1 <- unlist(lapply(r.estNULL.1$pval_me, function(x) x <= 0.05))
+pp2 <- unlist(lapply(r.est6.1$pval_me, function(x) x <= 0.05))
+pp3 <- unlist(lapply(r.est5.1$pval_me, function(x) x <= 0.05))
+pp4 <- unlist(lapply(r.est4.1$pval_me, function(x) x <= 0.05))
+pp5 <- unlist(lapply(r.est3.1$pval_me, function(x) x <= 0.05))
+pp <- rbind(pp1, pp2, pp3, pp4, pp5)
+avgME <- rowMeans(pp)
+@
+
+<<powerTab, echo = FALSE, results = 'asis'>>=
+tbl <- data.frame(TestPositiveFraction = avgTPF, OR=avgOR, GEE = avgGEE, RandomEffects=avgME, row.names = c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3"))
+xtable(tbl, align = c("l|cccc"), caption = "The proportion of simulations that returned significant results for each intervention effect of interest (lambda) as in Table 2 of the paper, but now with 10,000 random intervention allocations of 1,000 cases and 1,000 controls (r=1).", digits = 4)
+@
+
+\FloatBarrier
+
+\section{UPDATED TABLE}
+This is the corrected table. Notice the only change is in the estimated power for GEE.
+
+<<echo = FALSE>>=
+
+# # Using data from proportion-significant.R
+# # TPF
+# load("randomNULLtTest1_12192017.Rdata")
+# load("random6tTest1_12192017.Rdata")
+# load("random5tTest1_12192017.Rdata")
+# load("random4tTest1_12192017.Rdata")
+# load("random3tTest1_12192017.Rdata")
+# 
+# # OR - ABGH Method
+# load("biasOR_paper_NULL_1_12192017.RData")
+# load("biasOR_paper_6_1_12192017.RData")
+# load("biasOR_paper_5_1_12192017.RData")
+# load("biasOR_paper_4_1_12192017.RData")
+# load("biasOR_paper_3_1_12192017.RData")
+
+load(here("cr_tnd", "data/nov18/r_estNULL_11012018.RData"))
+load(here("cr_tnd", "data/nov18/r_est6_11012018.RData"))
+load(here("cr_tnd", "data/nov18/r_est5_11042018.RData"))
+load(here("cr_tnd", "data/nov18/r_est4_11042018.RData"))
+load(here("cr_tnd", "data/nov18/r_est3_11042018.RData"))
+
+zstar <- qnorm(0.975)
+period1 <- c("03_05", "05_06", "06_07", "07_08", "08_10", "10_11", "11_12", "12_13", "13_14")
+@
+
+<<power2, echo = FALSE>>=
+# Test Positive
+o1 <- (unlist(lapply(tNULLr.2.1$pVals, function(x) x <= 0.05)))
+names(o1) <- c(paste0(period1)) 
+o2 <- (unlist(lapply(t60r.2.1$pVals, function(x) x <= 0.05)))
+o3 <- (unlist(lapply(t50r.2.1$pVals, function(x) x <= 0.05)))
+o4 <- (unlist(lapply(t40r.2.1$pVals, function(x) x <= 0.05)))
+o5 <- (unlist(lapply(t30r.2.1$pVals, function(x) x <= 0.05)))
+o <- rbind(o1,o2, o3, o4, o5)
+avgTPF <- rowMeans(o)
+rownames(o) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
+o <- cbind(o, avgTPF)
+colnames(o)[10] <- "Average"
+
+# OR - ABGH Method
+pp1 <- unlist(lapply(biasOR.paper.NULL.1$insignificance, function(x) 1-x))
+pp2 <- unlist(lapply(biasOR.paper.6.1$insignificance, function(x) 1-x))
+pp3 <- unlist(lapply(biasOR.paper.5.1$insignificance, function(x) 1-x))
+pp4 <- unlist(lapply(biasOR.paper.4.1$insignificance, function(x) 1-x))
+pp5 <- unlist(lapply(biasOR.paper.3.1$insignificance, function(x) 1-x))
+pp <- rbind(pp1, pp2, pp3, pp4, pp5)
+avgOR <- rowMeans(pp)
+
+
+# GEE
+pp1 <- unlist(lapply(r.estNULL.1$pval_gee, function(x) x <= 0.05))
+pp2 <- unlist(lapply(r.est6.1$pval_gee, function(x) x <= 0.05))
+pp3 <- unlist(lapply(r.est5.1$pval_gee, function(x) x <= 0.05))
+pp4 <- unlist(lapply(r.est4.1$pval_gee, function(x) x <= 0.05))
+pp5 <- unlist(lapply(r.est3.1$pval_gee, function(x) x <= 0.05))
+pp <- rbind(pp1, pp2, pp3, pp4, pp5)
+avgGEE <- rowMeans(pp)
+
+
+# ME
 pp1 <- unlist(lapply(r.estNULL.1$pval_me, function(x) x < 0.05))
 pp2 <- unlist(lapply(r.est6.1$pval_me, function(x) x < 0.05))
 pp3 <- unlist(lapply(r.est5.1$pval_me, function(x) x < 0.05))
@@ -90,7 +174,7 @@ pp <- rbind(pp1, pp2, pp3, pp4, pp5)
 avgME <- rowMeans(pp)
 @
 
-<<powerTab, echo = FALSE, results = 'asis'>>=
+<<powerTab-v2, echo = FALSE, results = 'asis'>>=
 tbl <- data.frame(TestPositiveFraction = avgTPF, OR=avgOR, GEE = avgGEE, RandomEffects=avgME, row.names = c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3"))
 xtable(tbl, align = c("l|cccc"), caption = "The proportion of simulations that returned significant results for each intervention effect of interest (lambda) as in Table 2 of the paper, but now with 10,000 random intervention allocations of 1,000 cases and 1,000 controls (r=1).", digits = 4)
 @
