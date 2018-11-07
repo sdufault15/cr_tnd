@@ -17,6 +17,8 @@ knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='Figs/',
 
 \maketitle
 
+\section{OUTDATED TABLE} 
+December 29, 2017. This table has been updated. \FloatBarrier
 
 <<echo = FALSE>>=
 library(xtable)
@@ -92,6 +94,10 @@ avgME <- rowMeans(pp)
 tbl <- data.frame(TestPositiveFraction = avgTPF, OR=avgOR, GEE = avgGEE, RandomEffects=avgME, row.names = c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3"))
 xtable(tbl, align = c("l|cccc"), caption = "The proportion of simulations that returned significant results for each intervention effect of interest (lambda). The GEE assumed an exchangeable correlation matrix. Each approach was applied to the results of the 10,000 random intervention allocations with 1,000 cases and 4,000 controls (r = 4).", digits = 4)
 @
+
+\FloatBarrier
+
+\section{UPDATED TABLE}
 
 
 
