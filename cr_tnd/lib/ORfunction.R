@@ -56,7 +56,7 @@ ORTestFunction <- function(dF, rrIN, period, n1 = 1000, ratio = 4){
       nCases <- nStarProp*n1 # assigning cases to clusters
       
       # NEED TO RESHAPE THE DATA
-      tempWide <- data.frame(Cluster = dta$clust, Treatment = txDta, Cases = nCases, Controls = nControls) # Adding the number of cases and controls observed in each cluster
+      tempWide <- data.frame(Cluster = dta$clust, Treatment = unlist(txDta), Cases = nCases, Controls = nControls) # Adding the number of cases and controls observed in each cluster
       tempLong <- tempWide %>% gather("Status", "Counts", 3:4)
       tempLong$v <- round(tempLong$Counts)
       tempLong <- tempLong %>% expandRows(count = "v", count.is.col = TRUE, drop = FALSE) %>% select(-Counts)
