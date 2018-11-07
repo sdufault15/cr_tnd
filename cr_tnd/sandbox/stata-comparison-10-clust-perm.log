@@ -1,0 +1,647 @@
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/suzannedufault/Box Sync/Research/TND_CRT_PAPER1_2017/CR_TND/cr_tnd/sandbox//stata-comparison-10-clust-perm.log
+  log type:  text
+ opened on:   6 Nov 2018, 10:16:58
+
+. 
+. 
+. **** DATA ****
+. 
+. import delimited "$data/errors-permutation-dist-10-clust.csv", clear
+(5 vars, 199 obs)
+
+. 
+. label variable cases "Observed distribution of cases"
+
+. label variable ofi "Observed distribution of OFIs"
+
+. label variable tx "Cluster assignment"
+
+. label variable casestatus "Sampled cases and OFIs"
+
+. 
+. label define txstat 1 "Treatment" 0 "Control"
+
+. label define casestat 1 "Case" 0 "OFI"
+
+. label values tx txstat
+
+. label values casestatus casestat
+
+. 
+. **** Analysis ****
+. 
+. /*
+> Results from R's geepack
+> 
+> 
+> Call:
+> geeglm(formula = case.status ~ tx, family = binomial(link = "logit"), 
+>     data = errslong, id = clust, corstr = "exchangeable", scale.fix = TRUE)
+> 
+>  Coefficients:
+>               Estimate    Std.err  Wald Pr(>|W|)
+> (Intercept) -1.048e-01  8.443e-02 1.540    0.215
+> tx          -1.024e+15  1.083e+15 0.894    0.344
+> 
+> Scale is fixed.
+> 
+> Correlation: Structure = exchangeable  Link = identity 
+> 
+> Estimated Correlation Parameters:
+>        Estimate   Std.err
+> alpha 6.688e+14 7.242e+29
+> Number of clusters:   10   Maximum cluster size: 26 
+> 
+> */
+. 
+. xtset clust
+       panel variable:  clust (unbalanced)
+
+. 
+. * Using an exchangeable correlation structure, GEE does not converge.
+. capture noisily xtgee casestatus tx , family(binomial) link(logit) vce(robust) corr(exc) 
+
+(resetting alpha to -0.0396)
+Iteration 1: tolerance = .1957926
+Iteration 2: tolerance = .13480963
+(resetting alpha to -0.0396)
+Iteration 3: tolerance = .12210466
+Iteration 4: tolerance = .13378162
+(resetting alpha to -0.0396)
+Iteration 5: tolerance = .12168744
+Iteration 6: tolerance = .13378074
+(resetting alpha to -0.0396)
+Iteration 7: tolerance = .12168708
+Iteration 8: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 9: tolerance = .12168708
+Iteration 10: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 11: tolerance = .12168708
+Iteration 12: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 13: tolerance = .12168708
+Iteration 14: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 15: tolerance = .12168708
+Iteration 16: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 17: tolerance = .12168708
+Iteration 18: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 19: tolerance = .12168708
+Iteration 20: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 21: tolerance = .12168708
+Iteration 22: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 23: tolerance = .12168708
+Iteration 24: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 25: tolerance = .12168708
+Iteration 26: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 27: tolerance = .12168708
+Iteration 28: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 29: tolerance = .12168708
+Iteration 30: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 31: tolerance = .12168708
+Iteration 32: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 33: tolerance = .12168708
+Iteration 34: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 35: tolerance = .12168708
+Iteration 36: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 37: tolerance = .12168708
+Iteration 38: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 39: tolerance = .12168708
+Iteration 40: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 41: tolerance = .12168708
+Iteration 42: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 43: tolerance = .12168708
+Iteration 44: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 45: tolerance = .12168708
+Iteration 46: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 47: tolerance = .12168708
+Iteration 48: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 49: tolerance = .12168708
+Iteration 50: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 51: tolerance = .12168708
+Iteration 52: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 53: tolerance = .12168708
+Iteration 54: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 55: tolerance = .12168708
+Iteration 56: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 57: tolerance = .12168708
+Iteration 58: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 59: tolerance = .12168708
+Iteration 60: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 61: tolerance = .12168708
+Iteration 62: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 63: tolerance = .12168708
+Iteration 64: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 65: tolerance = .12168708
+Iteration 66: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 67: tolerance = .12168708
+Iteration 68: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 69: tolerance = .12168708
+Iteration 70: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 71: tolerance = .12168708
+Iteration 72: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 73: tolerance = .12168708
+Iteration 74: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 75: tolerance = .12168708
+Iteration 76: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 77: tolerance = .12168708
+Iteration 78: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 79: tolerance = .12168708
+Iteration 80: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 81: tolerance = .12168708
+Iteration 82: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 83: tolerance = .12168708
+Iteration 84: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 85: tolerance = .12168708
+Iteration 86: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 87: tolerance = .12168708
+Iteration 88: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 89: tolerance = .12168708
+Iteration 90: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 91: tolerance = .12168708
+Iteration 92: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 93: tolerance = .12168708
+Iteration 94: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 95: tolerance = .12168708
+Iteration 96: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 97: tolerance = .12168708
+Iteration 98: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 99: tolerance = .12168708
+Iteration 100: tolerance = .13378073
+
+GEE population-averaged model                   Number of obs     =        199
+Group variable:                      clust      Number of groups  =         10
+Link:                                logit      Obs per group:
+Family:                           binomial                    min =         16
+Correlation:                  exchangeable                    avg =       19.9
+                                                              max =         26
+                                                Wald chi2(1)      =       1.08
+Scale parameter:                         1      Prob > chi2       =     0.2990
+
+                                  (Std. Err. adjusted for clustering on clust)
+------------------------------------------------------------------------------
+             |               Robust
+  casestatus |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+          tx |   .1186221   .1142128     1.04   0.299    -.1052309    .3424752
+       _cons |  -.1027439   .0589894    -1.74   0.082     -.218361    .0128732
+------------------------------------------------------------------------------
+convergence not achieved
+
+. capture noisily xtgee casestatus tx , family(binomial) link(logit) vce(conventional) corr(exc)  
+
+(resetting alpha to -0.0396)
+Iteration 1: tolerance = .1957926
+Iteration 2: tolerance = .13480963
+(resetting alpha to -0.0396)
+Iteration 3: tolerance = .12210466
+Iteration 4: tolerance = .13378162
+(resetting alpha to -0.0396)
+Iteration 5: tolerance = .12168744
+Iteration 6: tolerance = .13378074
+(resetting alpha to -0.0396)
+Iteration 7: tolerance = .12168708
+Iteration 8: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 9: tolerance = .12168708
+Iteration 10: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 11: tolerance = .12168708
+Iteration 12: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 13: tolerance = .12168708
+Iteration 14: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 15: tolerance = .12168708
+Iteration 16: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 17: tolerance = .12168708
+Iteration 18: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 19: tolerance = .12168708
+Iteration 20: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 21: tolerance = .12168708
+Iteration 22: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 23: tolerance = .12168708
+Iteration 24: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 25: tolerance = .12168708
+Iteration 26: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 27: tolerance = .12168708
+Iteration 28: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 29: tolerance = .12168708
+Iteration 30: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 31: tolerance = .12168708
+Iteration 32: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 33: tolerance = .12168708
+Iteration 34: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 35: tolerance = .12168708
+Iteration 36: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 37: tolerance = .12168708
+Iteration 38: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 39: tolerance = .12168708
+Iteration 40: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 41: tolerance = .12168708
+Iteration 42: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 43: tolerance = .12168708
+Iteration 44: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 45: tolerance = .12168708
+Iteration 46: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 47: tolerance = .12168708
+Iteration 48: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 49: tolerance = .12168708
+Iteration 50: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 51: tolerance = .12168708
+Iteration 52: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 53: tolerance = .12168708
+Iteration 54: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 55: tolerance = .12168708
+Iteration 56: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 57: tolerance = .12168708
+Iteration 58: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 59: tolerance = .12168708
+Iteration 60: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 61: tolerance = .12168708
+Iteration 62: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 63: tolerance = .12168708
+Iteration 64: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 65: tolerance = .12168708
+Iteration 66: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 67: tolerance = .12168708
+Iteration 68: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 69: tolerance = .12168708
+Iteration 70: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 71: tolerance = .12168708
+Iteration 72: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 73: tolerance = .12168708
+Iteration 74: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 75: tolerance = .12168708
+Iteration 76: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 77: tolerance = .12168708
+Iteration 78: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 79: tolerance = .12168708
+Iteration 80: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 81: tolerance = .12168708
+Iteration 82: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 83: tolerance = .12168708
+Iteration 84: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 85: tolerance = .12168708
+Iteration 86: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 87: tolerance = .12168708
+Iteration 88: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 89: tolerance = .12168708
+Iteration 90: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 91: tolerance = .12168708
+Iteration 92: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 93: tolerance = .12168708
+Iteration 94: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 95: tolerance = .12168708
+Iteration 96: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 97: tolerance = .12168708
+Iteration 98: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 99: tolerance = .12168708
+Iteration 100: tolerance = .13378073
+
+GEE population-averaged model                   Number of obs     =        199
+Group variable:                      clust      Number of groups  =         10
+Link:                                logit      Obs per group:
+Family:                           binomial                    min =         16
+Correlation:                  exchangeable                    avg =       19.9
+                                                              max =         26
+                                                Wald chi2(1)      =       0.73
+Scale parameter:                         1      Prob > chi2       =     0.3940
+
+------------------------------------------------------------------------------
+  casestatus |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+          tx |   .1186221   .1391692     0.85   0.394    -.1541444    .3913887
+       _cons |  -.1027439   .1092842    -0.94   0.347    -.3169371    .1114492
+------------------------------------------------------------------------------
+convergence not achieved
+
+. 
+. * Using an independent corr structure, GEE does converge
+. xtgee casestatus tx , family(binomial) link(logit) vce(robust) corr(ind)
+
+Iteration 1: tolerance = 5.490e-10
+
+GEE population-averaged model                   Number of obs     =        199
+Group variable:                      clust      Number of groups  =         10
+Link:                                logit      Obs per group:
+Family:                           binomial                    min =         16
+Correlation:                   independent                    avg =       19.9
+                                                              max =         26
+                                                Wald chi2(1)      =       2.93
+Scale parameter:                         1      Prob > chi2       =     0.0871
+
+Pearson chi2(199):                  199.00      Deviance          =     275.26
+Dispersion (Pearson):                    1      Dispersion        =   1.383235
+
+                                  (Std. Err. adjusted for clustering on clust)
+------------------------------------------------------------------------------
+             |               Robust
+  casestatus |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+          tx |   .2209593   .1291395     1.71   0.087    -.0321493     .474068
+       _cons |  -.1076307   .0842205    -1.28   0.201    -.2726999    .0574386
+------------------------------------------------------------------------------
+
+. 
+. 
+. 
+. **** Shuffling Rows ****
+. * Row order does not matter for Stata's GEE function
+. gen shuffle = runiform()
+
+. sort shuffle
+
+. 
+. capture noisily xtgee casestatus tx, family(binomial) link(logit) vce(robust) corr(exc)
+
+(resetting alpha to -0.0396)
+Iteration 1: tolerance = .1957926
+Iteration 2: tolerance = .13480963
+(resetting alpha to -0.0396)
+Iteration 3: tolerance = .12210466
+Iteration 4: tolerance = .13378162
+(resetting alpha to -0.0396)
+Iteration 5: tolerance = .12168744
+Iteration 6: tolerance = .13378074
+(resetting alpha to -0.0396)
+Iteration 7: tolerance = .12168708
+Iteration 8: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 9: tolerance = .12168708
+Iteration 10: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 11: tolerance = .12168708
+Iteration 12: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 13: tolerance = .12168708
+Iteration 14: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 15: tolerance = .12168708
+Iteration 16: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 17: tolerance = .12168708
+Iteration 18: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 19: tolerance = .12168708
+Iteration 20: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 21: tolerance = .12168708
+Iteration 22: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 23: tolerance = .12168708
+Iteration 24: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 25: tolerance = .12168708
+Iteration 26: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 27: tolerance = .12168708
+Iteration 28: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 29: tolerance = .12168708
+Iteration 30: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 31: tolerance = .12168708
+Iteration 32: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 33: tolerance = .12168708
+Iteration 34: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 35: tolerance = .12168708
+Iteration 36: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 37: tolerance = .12168708
+Iteration 38: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 39: tolerance = .12168708
+Iteration 40: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 41: tolerance = .12168708
+Iteration 42: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 43: tolerance = .12168708
+Iteration 44: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 45: tolerance = .12168708
+Iteration 46: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 47: tolerance = .12168708
+Iteration 48: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 49: tolerance = .12168708
+Iteration 50: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 51: tolerance = .12168708
+Iteration 52: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 53: tolerance = .12168708
+Iteration 54: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 55: tolerance = .12168708
+Iteration 56: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 57: tolerance = .12168708
+Iteration 58: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 59: tolerance = .12168708
+Iteration 60: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 61: tolerance = .12168708
+Iteration 62: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 63: tolerance = .12168708
+Iteration 64: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 65: tolerance = .12168708
+Iteration 66: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 67: tolerance = .12168708
+Iteration 68: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 69: tolerance = .12168708
+Iteration 70: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 71: tolerance = .12168708
+Iteration 72: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 73: tolerance = .12168708
+Iteration 74: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 75: tolerance = .12168708
+Iteration 76: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 77: tolerance = .12168708
+Iteration 78: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 79: tolerance = .12168708
+Iteration 80: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 81: tolerance = .12168708
+Iteration 82: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 83: tolerance = .12168708
+Iteration 84: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 85: tolerance = .12168708
+Iteration 86: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 87: tolerance = .12168708
+Iteration 88: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 89: tolerance = .12168708
+Iteration 90: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 91: tolerance = .12168708
+Iteration 92: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 93: tolerance = .12168708
+Iteration 94: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 95: tolerance = .12168708
+Iteration 96: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 97: tolerance = .12168708
+Iteration 98: tolerance = .13378073
+(resetting alpha to -0.0396)
+Iteration 99: tolerance = .12168708
+Iteration 100: tolerance = .13378073
+
+GEE population-averaged model                   Number of obs     =        199
+Group variable:                      clust      Number of groups  =         10
+Link:                                logit      Obs per group:
+Family:                           binomial                    min =         16
+Correlation:                  exchangeable                    avg =       19.9
+                                                              max =         26
+                                                Wald chi2(1)      =       1.08
+Scale parameter:                         1      Prob > chi2       =     0.2990
+
+                                  (Std. Err. adjusted for clustering on clust)
+------------------------------------------------------------------------------
+             |               Robust
+  casestatus |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+          tx |   .1186221   .1142128     1.04   0.299    -.1052309    .3424752
+       _cons |  -.1027439   .0589894    -1.74   0.082     -.218361    .0128732
+------------------------------------------------------------------------------
+convergence not achieved
+
+. 
+. /*
+> Compared to sorted output:
+> 
+> . capture noisily xtgee casestatus tx , family(binomial) link(logit) vce(robust) corr(exc)
+> 
+> GEE population-averaged model                   Number of obs     =        199
+> Group variable:                      clust      Number of groups  =         10
+> Link:                                logit      Obs per group:
+> Family:                           binomial                    min =         16
+> Correlation:                  exchangeable                    avg =       19.9
+>                                                               max =         26
+>                                                 Wald chi2(1)      =       1.08
+> Scale parameter:                         1      Prob > chi2       =     0.2990
+> 
+>                                   (Std. Err. adjusted for clustering on clust)
+> ------------------------------------------------------------------------------
+>              |               Robust
+>   casestatus |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+> -------------+----------------------------------------------------------------
+>           tx |   .1186221   .1142128     1.04   0.299    -.1052309    .3424752
+>        _cons |  -.1027439   .0589894    -1.74   0.082     -.218361    .0128732
+> ------------------------------------------------------------------------------
+> convergence not achieved
+> */
+. 
+. **** FOOTER ****
+. log close
+      name:  <unnamed>
+       log:  /Users/suzannedufault/Box Sync/Research/TND_CRT_PAPER1_2017/CR_TND/cr_tnd/sandbox//stata-comparison-10-clust-perm.log
+  log type:  text
+ closed on:   6 Nov 2018, 10:17:01
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

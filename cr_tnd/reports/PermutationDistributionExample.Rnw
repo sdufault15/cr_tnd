@@ -170,6 +170,10 @@ xtable(sds, align = "l|c", digits = 5, caption = "Comparison of our proposed met
 @
 \FloatBarrier
 
+The average SD for GEE is massive, but this is really only due to \Sexpr{sum(unlist(m$sd_gee_est) > 0.5)} out of \Sexpr{length(unlist(m$sd_gee_est))} estimates that were massive. If we remove those 16 estimates, the average is \Sexpr{round(mean(unlist(m$sd_gee_est)[unlist(m$sd_gee_est) < 0.5]), 4)}
+
+\hrule
+
 When:
 \begin{itemize}
 \item RR = 1
@@ -195,4 +199,71 @@ xtable(sds, align = "l|c", digits = 5, caption = "Comparison of our proposed met
 \FloatBarrier
 
 When $2m = 10$ GEE and ME appear to do a poor job estimating the permutation distribution. However, as the number of cases and controls increase, mixed effect modeling (with random effects at the cluster level) improves with respect to approximating the permutation distribution. 
+
+
+\section{Further Investigation of GEE}
+Subsetting to the treatment allocations causing the problems:
+
+\FloatBarrier
+
+<<echo = FALSE, results = 'asis'>>=
+errs <- dataFrame[, c(1:3, 4 + which(unlist(m$sd_gee_est) > 0.5))]
+xtable(errs, digits = 0) %>% print(include.rownames = FALSE, scalebox = 0.6)
+@
+
+
+\FloatBarrier
+
+When we examine one particular instance of the above assignments, we see that for each cluster the number of cases and OFIs are very similar. This is logical, as RR = 1
+<<echo = FALSE>>=
+errs1 <- errs[,c(1:3,19)]
+errs1 <- errs1 %>% mutate(propCases = Cases/sum(Cases),
+                          propOFI = OFI/sum(OFI),
+                          sampledCases = round(100*propCases),
+                          sampledOFI = round(100*propOFI)) %>%
+  select(-propCases, -propOFI)
+names(errs1)[names(errs1) == grep("tx", names(errs1), value = TRUE)] <- "tx"
+
+errslong <- errs1 %>% gather("case.status", "number", 5:6) %>% arrange(clust) %>% mutate(case.status = ifelse(case.status == "sampledCases", 1, 0))
+errslong <- errslong %>% expandRows(count = "number", count.is.col = TRUE)
+write.csv(errslong, file = here("cr_tnd", "data/errors-permutation-dist-10-clust.csv"), row.names = FALSE)
+@
+
+<<tidy = TRUE, size='tiny'>>=
+g1 <- geeglm(case.status ~ tx, data = errslong, family = binomial(link = "logit"), id = clust, corstr = "exchangeable", scale.fix = TRUE)
+summary(g1)
+# For comparison, a standard logistic model:
+stand1 <- glm(case.status ~ tx, data = errslong, family = binomial)
+summary(stand1)
+@
+
+When I use a different package \textbf{gee} (rather than \textbf{geepack}), I get a warning that convergence is not achieved and reasonable estimates for the coeffiicent and the standard error. 
+<<tidy = TRUE>>=
+library(gee)
+g2 <- gee(case.status ~ tx, data = errslong, id = clust, family = binomial(link = "logit"), corstr = "exchangeable", scale.fix = TRUE)
+@
+
+\begin{verbatim}
+Beginning Cgee S-function, @(#) geeformula.q 4.13 98/01/27
+running glm to get initial regression estimate
+(Intercept)          tx 
+    -0.1076      0.2210 
+Warning messages:
+1: In gee(case.status ~ tx, data = errslong, id = clust, family = binomial(link = "logit"),  :
+  Maximum number of iterations consumed
+2: In gee(case.status ~ tx, data = errslong, id = clust, family = binomial(link = "logit"),  :
+  Convergence not achieved; results suspect
+3: In gee(case.status ~ tx, data = errslong, id = clust, family = binomial(link = "logit"),  :
+  Cgee had an error (code= 104).  Results suspect.
+\end{verbatim}
+
+<<echo = FALSE>>=
+summary(g2)$call
+summary(g2)$model
+summary(g2)$coef
+print(c("Number of iterations: ", summary(g2)$iterations))
+print(c("Estimated Scale Parameter: ", g2$scale))
+@
+
+
 \end{document}
