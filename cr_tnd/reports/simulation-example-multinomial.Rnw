@@ -1,0 +1,151 @@
+\documentclass{article}
+\usepackage[margin = 0.75in]{geometry}
+\usepackage{placeins}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{amsmath, amssymb}
+
+\title{Simulating Cluster-Level Counts from Multinomial Models}
+\author{Suzanne Dufault}
+\date{\today}
+
+<<r global_options, include=FALSE>>=
+knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='../graphs/', cache.path = "../cache/",
+                       warning=FALSE, message=FALSE)
+@
+
+\begin{document}
+
+\maketitle
+
+\section{Set-Up} \FloatBarrier
+
+\begin{table}[h!]
+\centering
+\resizebox{0.95\textwidth}{!}{
+\begin{tabular}{lcccccccc}
+\toprule
+& \multicolumn{4}{c}{\textbf{Seek Care}} & \multicolumn{4}{c}{\textbf{Do Not Seek Care}}\\
+\cmidrule(lr){2-5}\cmidrule(lr){6-9}
+& \parbox[c]{2cm}{\centering Infected with \\DENV}& \parbox[c]{2cm}{\centering Infected with \\OFI} & \parbox[c]{2cm}{\centering Not \\Infected} & \textit{Total} & \parbox[c]{2cm}{\centering Infected with \\DENV}& \parbox[c]{2cm}{\centering Infected with \\OFI} & \parbox[c]{2cm}{\centering Not \\Infected} & \textit{Total} \\
+%& \multirow{2}{*}{Infected with DENV}& \multirow{2}{*}{Infected with OFI} & \multirow{2}{*}{Not Infected} & \textit{Total} & \multirow{2}{*}{Infected with DENV}& \multirow{2}{*}{Infected with OFI} & \multirow{2}{*}{Not Infected} & \textit{Total} \\
+%&&&&&&&\\
+\midrule
+Vaccinated & $A$ & $B$ & $C$ & $N_1$ & $D$ & $E$ & $F$ & $N_2$\\
+\parbox[b]{3cm}{Not Vaccinated} & $G$ & $H$ & $I$ & $N_3$ & $J$ & $K$ & $L$ & $N_4$\\
+\bottomrule 
+\end{tabular}}
+\caption{Stratification of population based on intervention status, infection, and health care-seeking behavior. Adapted from Figure 1 of Jackson \& Nelson (2013).}
+\end{table}
+
+Hence, $A$ represents the number of test-positive individuals in the treatment arm. We denote the observed number of these individuals in cluster $j$ as $A_j$. Previously, we were using the historic data and setting $A_j^*$ (the number of test-positive individuals in the intervention arm \textit{after} the intervention) deterministically such that: 
+
+\begin{equation*}
+A_j^* = A_j \times \lambda
+\end{equation*}
+
+\FloatBarrier
+
+\section{Description}
+
+We propose drawing case and OFI (\textit{e.g.} A, B, G, H) counts from multinomial distributions. \textbf{Cases} are drawn from the multinomial distribution parameterized by $n$ sampled cases ($n =$ 200, 400, 600, 800, 1000), with distribution among the clusters according to:
+
+\begin{equation*}
+p_{Dj}^* = \frac{X\times \lambda p_{D_j}  + (1-X)\times p_{D_j}}{\sum\limits_{j \in J} \left( X\times \lambda p_{D_j}  + (1-X)\times p_{D_j} \right)}
+\end{equation*}
+where $X = 0, 1$ according to treatment status and $p_{D_j}$ is the observed proportion of cases in cluster $j$. \vspace{1em}
+
+\textbf{OFIs} are drawn from the multinomial distribution parameterized by $4\times n$ sampled cases, with distribution among the clusters according to the observed distribution (i.e. intervention does not affect OFI counts).
+
+
+\section{Hypothetical 10 Cluster Example} 
+\FloatBarrier
+
+<<echo = FALSE, warning=FALSE, message=FALSE, results='asis'>>=
+library(tidyverse)
+library(xtable)
+
+clust <- seq(1:10)
+Cases <- c(52, 74, 54, 72, 46, 42, 70, 50, 73, 69)
+OFI <- c(138, 212, 125, 145, 165, 194, 250, 131, 229, 156)
+Period <- rep(1,10)
+
+df <- data.frame(Cluster = clust, Cases, OFI, Period) %>% 
+  mutate(tx = sample(c(rep(0,5), rep(1,5)), size = 10, replace = FALSE)) %>%
+  mutate(pD = Cases/sum(Cases),
+         pD.bar = OFI/sum(OFI))
+xtable(df, caption = "Hypothetical table of observed case and OFI counts and proportions", digits = c(rep(0,6),3,3)) %>% print(include.rownames = FALSE)
+@
+
+
+<<echo = FALSE>>=
+
+multinom_sample_function <- function(lambda, vecP.observed, tx.status, n, print = FALSE){
+  if (print == TRUE){ 
+      print(tx.status)
+      print(vecP.observed)
+      }
+  vecP.intervention <- vecP.observed*tx.status*lambda + vecP.observed*(1-tx.status)
+  if (print == TRUE){
+    print(vecP.intervention)
+  }
+  vecP.intervention <- vecP.intervention/sum(vecP.intervention)
+  if (print == TRUE){
+    print(vecP.intervention)
+    }
+  counts <- rmultinom(1, size = n, prob = vecP.intervention)
+  out <- data.frame(counts)
+  return(out)
+}
+
+generate_function <- function(cluster, lambda, n, tx, vecP.observed, vecP2.observed, print = FALSE){
+  # lambda is a vector of lambdas
+  # n is a vector of ns
+  out <- NULL
+  
+  for (size in n){
+    for (lamb in lambda){
+      out <- rbind(out, cbind(cluster, tx, lamb, size, cases = multinom_sample_function(lambda = lamb, vecP.observed = vecP.observed, tx.status = tx, n = size), OFIs = multinom_sample_function(lambda = 1, vecP.observed = vecP2.observed, tx.status = tx, n = 4*size)))
+    }
+  }
+  out <- data.frame(out)
+  names(out) <- c("Cluster", "Treatment", "lambda", "size", "cases", "OFIs")
+  return(out)
+}
+
+@
+
+<<cases_multinomial_example, echo = FALSE>>=
+set.seed(12352)
+mm <- generate_function(cluster = df$Cluster, lambda = c(1,0.6, 0.5, 0.4, 0.3), n = 100, tx = df$tx, vecP.observed = df$pD, vecP2.observed = df$pD.bar)
+
+mm$Treatment <- ifelse(df$tx == 1, "Treated", "Control")
+mm$Cluster <- as.factor(mm$Cluster)
+
+p1 <- mm %>% ggplot(aes(x = lambda, y = cases, col = Cluster)) + 
+  ggtitle("Multinomial Draws -- Cases", subtitle = "n = 100 cases") +
+  geom_point() +
+  facet_wrap(~Treatment) +
+  xlab("Intervention RR (lambda)\n(increasing in effect)") +
+  geom_line() +
+  scale_x_reverse() +
+  theme_classic()
+p1
+@
+
+<<ofis_multinomial_example, echo = FALSE>>=
+p2 <- mm %>% ggplot(aes(x = lambda, y = OFIs, col = Cluster)) + 
+  ggtitle("Multinomial Draws -- OFIs", subtitle = "n = 400 OFIs") +
+  geom_point() +
+  facet_wrap(~Treatment) +
+  xlab("Intervention RR (lambda)\n(increasing in effect)") +
+  geom_line() +
+  scale_x_reverse() +
+  theme_classic()
+p2
+@
+
+
+
+
+\end{document}
