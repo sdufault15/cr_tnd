@@ -15,7 +15,7 @@ library(readr)
 # User-Supplied Data and Functions
 source("~/cr_tnd/txtSetFunction.R")
 source("~/cr_tnd/ORfunction.R")
-dataFINAL <- read_csv("Final247Allocations.csv")
-dataFINAL <- subset(dataFINAL, select = -c(X1))
+load("Final494Allocations.RData")
+dataFINAL <- Final247Allocations %>% select(-X1)
 
 source("~/cr_tnd/coverage1_1_supp.R")

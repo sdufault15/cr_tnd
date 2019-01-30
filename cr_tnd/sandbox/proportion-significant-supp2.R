@@ -2,7 +2,19 @@
 
 # The proportion of simulations that returned significant results for each intervention effect of interest (\lambda)
 # The GEE assumed an exchangeable correlation matrix. Each approach was applied to the results of the 10,000
-# random intervention allocations with 1,000 cases and 1,000 controls (r = 1).
+# random intervention allocations with 1,000 cases and 4,000 controls (r = 4).
+
+library(dplyr)
+load(here("cr_tnd", "data/Final494Allocations.RData"))
+dataFINAL <- Final247Allocations %>% select(-X1)
+period1 <- c("03_05", "05_06", "06_07", "07_08", "08_10", "10_11", "11_12", "12_13", "13_14")
+source(here("cr_tnd", "lib/tTestFunction.R"))
+source(here("cr_tnd", "lib/paperFunction2.R"))
+source(here("cr_tnd", "lib/txtSetFunction.R"))
+source(here("cr_tnd", "lib/quadraticFUnction.R"))
+
+setwd(here("cr_tnd", "data/jan19-supp"))
+
 
 # Test-Positive Fraction
 tNULLr <- tTestFunction(dataFINAL, rrIN = 1, period = period1, ncases = 1000, ratio = 4)
