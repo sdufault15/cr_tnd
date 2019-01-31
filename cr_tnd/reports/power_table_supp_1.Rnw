@@ -2,6 +2,7 @@
 \usepackage{placeins}
 \usepackage{float}
 \usepackage[margin = 1in]{geometry}
+\usepackage{booktabs}
 
 
 <<r global_options, include=FALSE>>=
@@ -17,7 +18,9 @@ knitr::opts_chunk$set(fig.width=10, fig.height=6, fig.path='Figs/',
 
 \maketitle
 
-\section{OUTDATED TABLE}
+\section{Table 4 - Supplement}
+
+\subsection{Outdated Table}
 December 29, 2017. This table has been updated. \FloatBarrier
 
 <<echo = FALSE>>=
@@ -100,25 +103,27 @@ xtable(tbl, align = c("l|cccc"), caption = "The proportion of simulations that r
 
 \FloatBarrier
 
-\section{UPDATED TABLE}
+\subsection{Updated Table}
+
+\FloatBarrier
+
 This is the corrected table. Notice the only change is in the estimated power for GEE.
 
 <<echo = FALSE>>=
+# Using data from proportion-significant.R
+# TPF
+load(here("dec17", "randomNULLtTest1_12192017.Rdata"))
+load(here("dec17", "random6tTest1_12192017.Rdata"))
+load(here("dec17", "random5tTest1_12192017.Rdata"))
+load(here("dec17", "random4tTest1_12192017.Rdata"))
+load(here("dec17", "random3tTest1_12192017.Rdata"))
 
-# # Using data from proportion-significant.R
-# # TPF
-# load("randomNULLtTest1_12192017.Rdata")
-# load("random6tTest1_12192017.Rdata")
-# load("random5tTest1_12192017.Rdata")
-# load("random4tTest1_12192017.Rdata")
-# load("random3tTest1_12192017.Rdata")
-# 
-# # OR - ABGH Method
-# load("biasOR_paper_NULL_1_12192017.RData")
-# load("biasOR_paper_6_1_12192017.RData")
-# load("biasOR_paper_5_1_12192017.RData")
-# load("biasOR_paper_4_1_12192017.RData")
-# load("biasOR_paper_3_1_12192017.RData")
+# OR - ABGH Method
+load(here("dec17", "biasOR_paper_NULL_1_12192017.RData"))
+load(here("dec17", "biasOR_paper_6_1_12192017.RData"))
+load(here("dec17", "biasOR_paper_5_1_12192017.RData"))
+load(here("dec17", "biasOR_paper_4_1_12192017.RData"))
+load(here("dec17", "biasOR_paper_3_1_12192017.RData"))
 
 load(here("cr_tnd", "data/nov18/r_estNULL_11012018.RData"))
 load(here("cr_tnd", "data/nov18/r_est6_11012018.RData"))
@@ -130,10 +135,10 @@ zstar <- qnorm(0.975)
 period1 <- c("03_05", "05_06", "06_07", "07_08", "08_10", "10_11", "11_12", "12_13", "13_14")
 @
 
-<<power2, echo = FALSE>>=
+<<echo = FALSE>>=
 # Test Positive
 o1 <- (unlist(lapply(tNULLr.2.1$pVals, function(x) x <= 0.05)))
-names(o1) <- c(paste0(period1)) 
+names(o1) <- c(paste0(period1))
 o2 <- (unlist(lapply(t60r.2.1$pVals, function(x) x <= 0.05)))
 o3 <- (unlist(lapply(t50r.2.1$pVals, function(x) x <= 0.05)))
 o4 <- (unlist(lapply(t40r.2.1$pVals, function(x) x <= 0.05)))
@@ -174,9 +179,203 @@ pp <- rbind(pp1, pp2, pp3, pp4, pp5)
 avgME <- rowMeans(pp)
 @
 
-<<powerTab-v2, echo = FALSE, results = 'asis'>>=
+<<powerTab2, echo = FALSE, results = 'asis'>>=
 tbl <- data.frame(TestPositiveFraction = avgTPF, OR=avgOR, GEE = avgGEE, RandomEffects=avgME, row.names = c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3"))
 xtable(tbl, align = c("l|cccc"), caption = "The proportion of simulations that returned significant results for each intervention effect of interest (lambda) as in Table 2 of the paper, but now with 10,000 random intervention allocations of 1,000 cases and 1,000 controls (r=1).", digits = 4)
+@
+
+\FloatBarrier
+
+\section{Table 5 - Supplement}
+
+\subsection{Outdated Table}
+
+\FloatBarrier
+\begin{table}[h!]
+\centering
+\begin{tabular}{ccccc}
+\toprule
+Relative Risk ($\lambda$) &Test-Positive Fraction & Odds Ratio & GEE & Random Effects \\
+\midrule
+\midrule
+1 & 0.0013  & 0.0104  & 0.0000 &0.0043 \\
+0.6 & 0.4783 & 0.6055 & 0.0000 & 0.6462 \\
+0.5 & 0.8075  & 0.8864 & 0.0007 & 0.9166\\
+0.4 & 0.9732  & 0.9852  & 0.0241 & 0.9919 \\
+0.3 & 1.0000 & 0.9998 & 0.3462 &  1.0000\\
+\bottomrule
+\end{tabular}
+\caption{The proportion of simulations that returned significant results for each intervention effect of interest ($\lambda$) as in Table 2 of the paper, but now with each approach  applied to the results of the 247 constrained intervention allocations with 1,000 cases and 4,000 controls ($r=4$).}
+\end{table}
+
+\FloatBarrier
+
+\subsection{Updated Table}
+
+\FloatBarrier
+
+<<echo = FALSE>>=
+load(here("cr_tnd", "data/nov18/r_estNULL_4_11072018.RData"))
+load(here("cr_tnd", "data/nov18/r_est6_4_11072018.RData"))
+load(here("cr_tnd", "data/nov18/r_est5_4_11072018.RData"))
+load(here("cr_tnd", "data/nov18/r_est4_4_11072018.RData"))
+load(here("cr_tnd", "data/nov18/r_est3_4_11072018.RData"))
+
+# Using data from proportion-significant-supp1
+
+load(here("cr_tnd", "data/jan19-supp/tNULLr_12292017_supp_4.RData"))
+load(here("cr_tnd", "data/jan19-supp/t60r_12292017_supp_4.RData"))
+load(here("cr_tnd", "data/jan19-supp/t50r_12292017_supp_4.RData"))
+load(here("cr_tnd", "data/jan19-supp/t40r_12292017_supp_4.RData"))
+load(here("cr_tnd", "data/jan19-supp/t30r_12292017_supp_4.RData"))
+
+load(here("cr_tnd", "data/jan19-supp/orNULLr_12292017_supp_4.RData"))
+load(here("cr_tnd", "data/jan19-supp/or6r_12292017_supp_4.RData"))
+load(here("cr_tnd", "data/jan19-supp/or5r_12292017_supp_4.RData"))
+load(here("cr_tnd", "data/jan19-supp/or4r_12292017_supp_4.RData"))
+load(here("cr_tnd", "data/jan19-supp/or3r_12292017_supp_4.RData"))
+
+o1 <- (unlist(lapply(tNULLr$pVals, function(x) x <= 0.05)))
+names(o1) <- c(paste0(period1))
+o2 <- (unlist(lapply(t60r$pVals, function(x) x <= 0.05)))
+o3 <- (unlist(lapply(t50r$pVals, function(x) x <= 0.05)))
+o4 <- (unlist(lapply(t40r$pVals, function(x) x <= 0.05)))
+o5 <- (unlist(lapply(t30r$pVals, function(x) x <= 0.05)))
+o <- rbind(o1,o2, o3, o4, o5)
+avgTPF <- rowMeans(o)
+rownames(o) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
+o <- cbind(o, avgTPF)
+colnames(o)[10] <- "Average"
+
+# OR - ABGH Method
+pp1 <- unlist(lapply(nullFINAL$insignificance, function(x) 1-x))
+pp2 <- unlist(lapply(t6FINAL$insignificance, function(x) 1-x))
+pp3 <- unlist(lapply(t5FINAL$insignificance, function(x) 1-x))
+pp4 <- unlist(lapply(t4FINAL$insignificance, function(x) 1-x))
+pp5 <- unlist(lapply(t3FINAL$insignificance, function(x) 1-x))
+pp <- rbind(pp1, pp2, pp3, pp4, pp5)
+avgOR <- rowMeans(pp)
+
+# GEE
+pp1 <- unlist(lapply(r.estNULL.4$pval_gee, function(x) x <= 0.05))
+pp2 <- unlist(lapply(r.est6.4$pval_gee, function(x) x <= 0.05))
+pp3 <- unlist(lapply(r.est5.4$pval_gee, function(x) x <= 0.05))
+pp4 <- unlist(lapply(r.est4.4$pval_gee, function(x) x <= 0.05))
+pp5 <- unlist(lapply(r.est3.4$pval_gee, function(x) x <= 0.05))
+pp <- rbind(pp1, pp2, pp3, pp4, pp5)
+avgGEE <- rowMeans(pp)
+
+# ME
+pp1 <- unlist(lapply(r.estNULL.4$pval_me, function(x) x < 0.05))
+pp2 <- unlist(lapply(r.est6.4$pval_me, function(x) x < 0.05))
+pp3 <- unlist(lapply(r.est5.4$pval_me, function(x) x < 0.05))
+pp4 <- unlist(lapply(r.est4.4$pval_me, function(x) x < 0.05))
+pp5 <- unlist(lapply(r.est3.4$pval_me, function(x) x < 0.05))
+pp <- rbind(pp1, pp2, pp3, pp4, pp5)
+avgME <- rowMeans(pp)
+@
+
+<<echo = FALSE, results = 'asis'>>=
+tbl <- data.frame(TestPositiveFraction = avgTPF, OR=avgOR, GEE = avgGEE, RandomEffects=avgME, row.names = c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3"))
+xtable(tbl, align = c("l|cccc"), caption = "The proportion of simulations that returned significant results for each intervention effect of interest (lambda) as in Table 6 of the supplement for the paper, with 247 constrained intervention allocations of 1,000 cases and 4,000 controls (r=4).", digits = 4)
+@
+
+
+\section{Table 6}
+
+\subsection{Outdated Table}
+\FloatBarrier
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{ccccc}
+\toprule
+Relative Risk ($\lambda$) &Test-Positive Fraction & Odds Ratio & GEE & Random Effects \\
+\midrule
+\midrule
+1 & 0.0022 & 0.0104 & 0.0000 & 0.0047 \\
+0.6 & 0.5283 & 0.6055 & 0.0000 &  0.6581 \\
+0.5 & 0.8488 & 0.8864 & 0.0007 & 0.9199 \\
+0.4 &  0.9800 & 0.9852 & 0.0241 &  0.9924 \\
+0.3 & 1.0000 & 0.9998 & 0.3462 & 1.0000 \\
+\bottomrule
+\end{tabular}
+\caption{The proportion of simulations that returned significant results for each intervention effect of interest ($\lambda$) as in Supplementary Table 4, but now constrained intervention allocations with 1,000 cases and 1,000 controls ($r=1$)}
+\end{table}
+
+\FloatBarrier
+
+\subsection{Updated Table}
+
+\FloatBarrier
+
+<<echo = FALSE>>=
+setwd(here("cr_tnd", "data/nov18"))
+load("r_estNULL_11072018_supp.RData")
+load("r_est6_11072018_supp.RData")
+load("r_est5_11072018_supp.RData")
+load("r_est4_11072018_supp.RData")
+load("r_est3_11072018_supp.RData")
+@
+
+<<echo = FALSE>>=
+# Using data from proportion-significant-supp1
+
+load(here("cr_tnd", "data/jan19-supp/tNULLr_12292017_supp.RData"))
+load(here("cr_tnd", "data/jan19-supp/t60r_12292017_supp.RData"))
+load(here("cr_tnd", "data/jan19-supp/t50r_12292017_supp.RData"))
+load(here("cr_tnd", "data/jan19-supp/t40r_12292017_supp.RData"))
+load(here("cr_tnd", "data/jan19-supp/t30r_12292017_supp.RData"))
+
+load(here("cr_tnd", "data/jan19-supp/orNULLr_12292017_supp.RData"))
+load(here("cr_tnd", "data/jan19-supp/or6r_12292017_supp.RData"))
+load(here("cr_tnd", "data/jan19-supp/or5r_12292017_supp.RData"))
+load(here("cr_tnd", "data/jan19-supp/or4r_12292017_supp.RData"))
+load(here("cr_tnd", "data/jan19-supp/or3r_12292017_supp.RData"))
+
+o1 <- (unlist(lapply(tNULLr$pVals, function(x) x <= 0.05)))
+names(o1) <- c(paste0(period1))
+o2 <- (unlist(lapply(t60r$pVals, function(x) x <= 0.05)))
+o3 <- (unlist(lapply(t50r$pVals, function(x) x <= 0.05)))
+o4 <- (unlist(lapply(t40r$pVals, function(x) x <= 0.05)))
+o5 <- (unlist(lapply(t30r$pVals, function(x) x <= 0.05)))
+o <- rbind(o1,o2, o3, o4, o5)
+avgTPF <- rowMeans(o)
+rownames(o) <- c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3")
+o <- cbind(o, avgTPF)
+colnames(o)[10] <- "Average"
+
+# OR - ABGH Method
+pp1 <- unlist(lapply(nullFINAL$insignificance, function(x) 1-x))
+pp2 <- unlist(lapply(t6FINAL$insignificance, function(x) 1-x))
+pp3 <- unlist(lapply(t5FINAL$insignificance, function(x) 1-x))
+pp4 <- unlist(lapply(t4FINAL$insignificance, function(x) 1-x))
+pp5 <- unlist(lapply(t3FINAL$insignificance, function(x) 1-x))
+pp <- rbind(pp1, pp2, pp3, pp4, pp5)
+avgOR <- rowMeans(pp)
+
+# GEE
+pp1 <- unlist(lapply(r.estNULL.1$pval_gee, function(x) x <= 0.05))
+pp2 <- unlist(lapply(r.est6.1$pval_gee, function(x) x <= 0.05))
+pp3 <- unlist(lapply(r.est5.1$pval_gee, function(x) x <= 0.05))
+pp4 <- unlist(lapply(r.est4.1$pval_gee, function(x) x <= 0.05))
+pp5 <- unlist(lapply(r.est3.1$pval_gee, function(x) x <= 0.05))
+pp <- rbind(pp1, pp2, pp3, pp4, pp5)
+avgGEE <- rowMeans(pp)
+
+# ME
+pp1 <- unlist(lapply(r.estNULL.1$pval_me, function(x) x < 0.05))
+pp2 <- unlist(lapply(r.est6.1$pval_me, function(x) x < 0.05))
+pp3 <- unlist(lapply(r.est5.1$pval_me, function(x) x < 0.05))
+pp4 <- unlist(lapply(r.est4.1$pval_me, function(x) x < 0.05))
+pp5 <- unlist(lapply(r.est3.1$pval_me, function(x) x < 0.05))
+pp <- rbind(pp1, pp2, pp3, pp4, pp5)
+avgME <- rowMeans(pp)
+@
+
+<<echo = FALSE, results = 'asis'>>=
+tbl <- data.frame(TestPositiveFraction = avgTPF, OR=avgOR, GEE = avgGEE, RandomEffects=avgME, row.names = c("RR = 1", "RR = 0.6", "RR = 0.5", "RR = 0.4", "RR = 0.3"))
+xtable(tbl, align = c("l|cccc"), caption = "The proportion of simulations that returned significant results for each intervention effect of interest (lambda) as in Table 6 of the supplement for the paper, with 247 constrained intervention allocations of 1,000 cases and 1,000 controls (r=1).", digits = 4)
 @
 
 
