@@ -42,6 +42,7 @@ load("biasOR_paper_5_1_12192017.RData")
 load("biasOR_paper_4_1_12192017.RData")
 load("biasOR_paper_3_1_12192017.RData")
 
+# GEE and ME Results
 load("r_estNULL_12222017.RData")
 load("r_est6_12222017.RData")
 load("r_est5_12222017.RData")
@@ -215,6 +216,7 @@ Relative Risk ($\lambda$) &Test-Positive Fraction & Odds Ratio & GEE & Random Ef
 \FloatBarrier
 
 <<echo = FALSE>>=
+# GEE and ME Model Results
 load(here("cr_tnd", "data/nov18/r_estNULL_4_11072018.RData"))
 load(here("cr_tnd", "data/nov18/r_est6_4_11072018.RData"))
 load(here("cr_tnd", "data/nov18/r_est5_4_11072018.RData"))
@@ -223,12 +225,14 @@ load(here("cr_tnd", "data/nov18/r_est3_4_11072018.RData"))
 
 # Using data from proportion-significant-supp1
 
+# Test-Positive Fraction Results
 load(here("cr_tnd", "data/jan19-supp/tNULLr_12292017_supp_4.RData"))
 load(here("cr_tnd", "data/jan19-supp/t60r_12292017_supp_4.RData"))
 load(here("cr_tnd", "data/jan19-supp/t50r_12292017_supp_4.RData"))
 load(here("cr_tnd", "data/jan19-supp/t40r_12292017_supp_4.RData"))
 load(here("cr_tnd", "data/jan19-supp/t30r_12292017_supp_4.RData"))
 
+# Aggregate OR Results
 load(here("cr_tnd", "data/jan19-supp/orNULLr_12292017_supp_4.RData"))
 load(here("cr_tnd", "data/jan19-supp/or6r_12292017_supp_4.RData"))
 load(here("cr_tnd", "data/jan19-supp/or5r_12292017_supp_4.RData"))

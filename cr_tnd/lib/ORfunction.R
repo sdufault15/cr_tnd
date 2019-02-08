@@ -9,7 +9,6 @@ ORTestFunction <- function(dF, rrIN, period, n1 = 1000, ratio = 4){
   # 'period' is a vector of corresponding time periods for the case and control data
   # 'n1' is the number of cases you want to observe (default is 1000)
   # 'ratio' is the number of controls you want per case (default is 4)
-  # 'print' is a logical that will output various aspects of the function while it runs. Useful for checking code
   
   # Storage preparation for output and internal functions
   #sig <- matrix(NA, nrow = length(rrIN), ncol = length(period)) # Matrix for significance storage
